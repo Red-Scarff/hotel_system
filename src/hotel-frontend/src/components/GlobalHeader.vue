@@ -1,72 +1,130 @@
 <template>
-  <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" />
+  <div id="global-header">
+    <a-row>
+      <a-col flex="200px">
+        <div class="title">酒店预订管理系统</div>
+      </a-col>
+      <a-col flex="auto">
+        <a-menu
+          v-model:selectedKeys="current"
+          mode="horizontal"
+          :items="items"
+        />
+      </a-col>
+      <a-col flex="80px">
+        <div class="user-login-status">
+          <a-button type="primary">登录</a-button>
+        </div>
+      </a-col>
+    </a-row>
+  </div>
 </template>
 <script lang="ts" setup>
 import { h, ref } from "vue";
 import {
-  MailOutlined,
-  AppstoreOutlined,
+  HomeOutlined,
+  CrownOutlined,
+  UserOutlined,
   SettingOutlined,
 } from "@ant-design/icons-vue";
 import { MenuProps } from "ant-design-vue";
 const current = ref<string[]>(["mail"]);
 const items = ref<MenuProps["items"]>([
   {
-    key: "mail",
-    icon: () => h(MailOutlined),
-    label: "Navigation One",
-    title: "Navigation One",
+    key: "/",
+    icon: () => h(HomeOutlined),
+    label: "主页",
+    title: "主页",
   },
   {
-    key: "app",
-    icon: () => h(AppstoreOutlined),
-    label: "Navigation Two",
-    title: "Navigation Two",
+    key: "/user/login",
+    icon: () => h(UserOutlined),
+    label: "用户登录",
+    title: "用户登录",
   },
   {
-    key: "sub1",
+    key: "/user/register",
+    icon: () => h(UserOutlined),
+    label: "用户注册",
+    title: "用户注册",
+  },
+  {
+    key: "/admin/dashboard",
+    icon: () => h(CrownOutlined),
+    label: "管理后台",
+    title: "管理后台",
+  },
+  {
+    key: "/settings",
     icon: () => h(SettingOutlined),
-    label: "Navigation Three - Submenu",
-    title: "Navigation Three - Submenu",
-    children: [
-      {
-        type: "group",
-        label: "Item 1",
-        children: [
-          {
-            label: "Option 1",
-            key: "setting:1",
-          },
-          {
-            label: "Option 2",
-            key: "setting:2",
-          },
-        ],
-      },
-      {
-        type: "group",
-        label: "Item 2",
-        children: [
-          {
-            label: "Option 3",
-            key: "setting:3",
-          },
-          {
-            label: "Option 4",
-            key: "setting:4",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    key: "alipay",
-    label: h(
-      "a",
-      { href: "https://antdv.com", target: "_blank" },
-      "Navigation Four - Link"
-    ),
-    title: "Navigation Four - Link",
+    label: "设置",
+    title: "设置",
   },
 ]);
 </script>
+<style scoped>
+/* 顶部导航栏整体样式 */
+.header-container {
+  background: linear-gradient(90deg, #a0b9c8, #89a3b8); /* 渐变背景 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 添加轻微阴影 */
+  padding: 0 20px;
+  height: 64px; /* 固定高度，确保内容完全显示 */
+  display: flex; /* 使用 flex 布局 */
+  align-items: center; /* 垂直居中 */
+  justify-content: space-between; /* 两端对齐 */
+}
+
+/* 系统标题样式 */
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  white-space: nowrap; /* 防止文字换行 */
+}
+
+/* 导航菜单样式 */
+#global-header .ant-menu {
+  background: transparent; /* 菜单背景透明，与header背景一致 */
+  border-bottom: none;
+  color: #fff; /* 白色字体 */
+  flex: 1; /* 占据剩余空间 */
+}
+
+#global-header .ant-menu-item {
+  color: #fff;
+  padding: 0 15px; /* 调整间距 */
+  transition: background 0.3s ease, color 0.3s ease; /* 添加平滑过渡 */
+}
+
+#global-header .ant-menu-item:hover,
+#global-header .ant-menu-item-selected {
+  background: rgba(255, 255, 255, 0.2); /* 半透明白色悬停背景 */
+  border-radius: 5px; /* 增加圆角效果 */
+  color: #fff;
+}
+
+/* 登录按钮样式 */
+.login-button {
+  background: #305d9a; /* 深蓝色按钮 */
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 0 20px;
+  height: 36px; /* 固定高度，防止失衡 */
+  line-height: 36px;
+  border-radius: 18px; /* 圆角按钮 */
+  transition: all 0.3s ease; /* 添加平滑过渡 */
+}
+
+.login-button:hover {
+  background: #467ec2; /* 按钮悬停效果 */
+}
+
+/* 用户状态区域 */
+.user-login-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* 高度填满父容器 */
+}
+</style>
