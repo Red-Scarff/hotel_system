@@ -3,7 +3,7 @@
 ### 1. **项目架构设计**
 
 - **后端 (Django)** ：Django 负责构建 RESTful API，用于处理数据库交互、业务逻辑和身份验证。
-- **前端 (Vue.js)** ：Vue.js 用于实现用户界面，构建过程使用了 ant design vue 组件库，发送请求给 Django API 并展示响应数据。
+- **前端 (Vue.js)** ：Vue.js 用于实现用户界面，构建过程使用了 ant design vue 组件库，使用pinia库管理全局状态，发送请求给 Django API 并展示响应数据。
 - **通信方式** ：前端通过 Axios（或其他 HTTP 客户端库）向 Django API 发送请求，并通过 JSON 格式交换数据。
 
 **a. Django 项目**

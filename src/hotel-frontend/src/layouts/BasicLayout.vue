@@ -16,6 +16,11 @@
 
 <script setup lang="ts">
 import GlobalHeader from "@/components/GlobalHeader.vue";
+// 编写好后端后，请解除这部分注释
+// import { getCurrentUser } from "@/api/user";
+// getCurrentUser().then((res) => {
+//   console.log(res);
+// });
 </script>
 
 <style scoped>
@@ -23,20 +28,13 @@ import GlobalHeader from "@/components/GlobalHeader.vue";
   background: #a0b9c8; /* 柔和的莫兰迪蓝色 */
   color: #a0b9c8;
   margin-bottom: 10px;
-  height: 64px;
-  line-height: 64px;
-  padding: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 添加阴影 */
-  border-bottom: 1px solid #d0d0d0;
+  padding-inline: 10px;
 }
 
 #BasicLayout .content {
   padding: 24px;
   background: #f7f8fa; /* 柔和的浅灰背景 */
-  min-height: calc(100vh - 128px);
+  min-height: calc(100vh - 120px);
   overflow: auto;
   box-shadow: none; /* 去掉阴影 */
 }
