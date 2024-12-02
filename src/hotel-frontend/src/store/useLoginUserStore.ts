@@ -6,6 +6,7 @@ export const useLoginUserStore = defineStore("loginUser", () => {
   const loginUser = ref<any>({
     username: "",
     id: "",
+    userRole: "",
   });
   //远程获取登录用户信息
   async function fetchLoginUser() {

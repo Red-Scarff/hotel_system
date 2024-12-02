@@ -18,7 +18,7 @@
             {{ useLoginUserStore.loginUser.username ?? "请起一个名字" }}
           </div>
           <div v-else>
-            <a-button type="primary">登录</a-button>
+            <a-button type="primary" @click="handleButtonClick">登录</a-button>
           </div>
         </div>
       </a-col>
@@ -42,6 +42,10 @@ const loginUserStore = useLoginUserStore();
 const router = useRouter();
 const handleClick = ({ key }: { key: string }) => {
   router.push({ path: key });
+};
+
+const handleButtonClick = () => {
+  router.push({ path: "/user/login" });
 };
 const current = ref<string[]>(["mail"]);
 
@@ -89,8 +93,7 @@ const items = ref<MenuProps["items"]>([
   /* 渐变背景 */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   /* 添加轻微阴影 */
-  padding: 0 20px;
-  height: 64px;
+  /* height: 64px; */
   /* 固定高度，确保内容完全显示 */
   display: flex;
   /* 使用 flex 布局 */

@@ -36,13 +36,13 @@ export const userLogout = async (params: any) => {
 };
 
 // 获取用户列表
-export const searchUser = async (username: any) => {
+export const searchUsers = async () => {
   return await myAxios.request({
     url: "/api/user/search",
     method: "GET",
-    params: {
-      username: username,
-    },
+    // params: {
+    //   username: username,
+    // },
   });
 };
 

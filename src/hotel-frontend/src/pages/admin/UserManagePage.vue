@@ -1,104 +1,101 @@
 <template>
-  <a-table :columns="columns" :data-source="data">
-    <template #headerCell="{ column }">
-      <template v-if="column.key === 'name'">
-        <span>
-          <smile-outlined />
-          Name
-        </span>
+  <div id="user-manage-page">
+    <a-input-search
+      class="search-input"
+      v-model:value="searchValue"
+      placeholder="输入要查询的用户"
+      enter-button="搜索"
+      size="large"
+      @search="onSearch"
+    />
+    <a-table :columns="columns" :data-source="data">
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex === 'userRole'">
+          <a-tag v-if="record.userRole === 0" color="magenta">用户</a-tag>
+          <a-tag v-else-if="record.userRole === 1" color="cyan">管理员</a-tag>
+        </template>
+        <template v-if="column.key === 'action'">
+          <a-dropdown>
+            <template #overlay>
+              <a-menu @click="handleMenuClick">
+                <a-menu-item key="1">增加</a-menu-item>
+                <a-menu-item key="2">修改</a-menu-item>
+                <a-menu-item key="3">删除</a-menu-item>
+              </a-menu>
+            </template>
+            <a-button>
+              Actions
+              <DownOutlined />
+            </a-button>
+          </a-dropdown>
+        </template>
       </template>
-    </template>
-
-    <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'name'">
-        <a>
-          {{ record.name }}
-        </a>
-      </template>
-      <template v-else-if="column.key === 'tags'">
-        <span>
-          <a-tag
-            v-for="tag in record.tags"
-            :key="tag"
-            :color="
-              tag === 'loser'
-                ? 'volcano'
-                : tag.length > 5
-                ? 'geekblue'
-                : 'green'
-            "
-          >
-            {{ tag.toUpperCase() }}
-          </a-tag>
-        </span>
-      </template>
-      <template v-else-if="column.key === 'action'">
-        <span>
-          <a>Invite 一 {{ record.name }}</a>
-          <a-divider type="vertical" />
-          <a>Delete</a>
-          <a-divider type="vertical" />
-          <a class="ant-dropdown-link">
-            More actions
-            <down-outlined />
-          </a>
-        </span>
-      </template>
-    </template>
-  </a-table>
+    </a-table>
+  </div>
 </template>
 <script lang="ts" setup>
+import type { MenuProps } from "ant-design-vue";
+import { searchUser } from "@/api/user";
 import { SmileOutlined, DownOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
+import { reactive } from "vue";
+import { ref } from "vue";
+
+const searchValue = ref<string>("");
+
+const onSearch = (searchValue: string) => {
+  // 这段具体怎么实现搜索回来再改吧，直接输入用户名的话调用一下下面的fetch就行了
+};
 const columns = [
   {
-    name: "Name",
-    dataIndex: "name",
-    key: "name",
+    title: "id",
+    dataIndex: "id",
   },
   {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
+    title: "用户名",
+    dataIndex: "username",
   },
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
+    title: "身份",
+    dataIndex: "userRole", //假设userRole为0是用户，为1 是管理员
   },
   {
-    title: "Tags",
-    key: "tags",
-    dataIndex: "tags",
-  },
-  {
-    title: "Action",
+    title: "操作",
     key: "action",
   },
 ];
 
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
+let data = reactive([]);
+// 获取数据
+const fetchData = async () => {
+  const res = await searchUser();
+  if (res.data.data) {
+    data = res.data.data;
+  } else {
+    message.error("Failed to fetch data");
+  }
+};
+const handleMenuClick: MenuProps["onClick"] = (e) => {
+  switch (e.key) {
+    case "1":
+      // 增加用户
+      break;
+    case "2":
+      // 修改用户
+      break;
+    case "3":
+      // 删除用户
+      break;
+    default:
+      break;
+  } //具体实现再说吧
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+#user-manage-page .search-input {
+  max-width: 600px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+</style>
