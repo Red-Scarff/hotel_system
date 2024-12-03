@@ -26,22 +26,14 @@ import GlobalHeader from "@/components/GlobalHeader.vue";
 <style scoped>
 #BasicLayout .header {
   /* background: #a0b9c8; */
-  background: #7b1fa2;
+  background: linear-gradient(to right, #ffc0cb, #9370db);
   color: #a0b9c8;
-  margin-bottom: 10px;
   padding-inline: 10px;
-}
-
-#BasicLayout .content {
-  /* padding: 24px; */
-  background: #f7f8fa; /* 柔和的浅灰背景 */
-  min-height: calc(100vh - 120px);
-  overflow: auto;
-  box-shadow: none; /* 去掉阴影 */
+  height: 64px;
 }
 
 #BasicLayout .footer {
-  background: #388e3c;
+  background: linear-gradient(to right, #5faad5, #1e8fffb2, #5faad5);
   color: #fff;
   margin-top: 10px;
   text-align: center;
@@ -52,5 +44,10 @@ import GlobalHeader from "@/components/GlobalHeader.vue";
   padding: 10px;
   font-size: 14px;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 添加顶部阴影 */
+}
+#BasicLayout .content {
+  background: #f7f8fa; /* 柔和的浅灰背景 */
+  min-height: calc(100vh - 120px); /* 内容区域高度 */
+  box-shadow: none; /* 去掉阴影 */
 }
 </style>
