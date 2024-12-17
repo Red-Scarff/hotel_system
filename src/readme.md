@@ -1,11 +1,13 @@
 + 数据库设置
 
+在my_hotel文件中新建local_setting.py
+
 在这里将参数改为你的数据库设置
 
 记得先去数据库建立一个名为my_hotel的库
 
 ```
-  # my_hotel/setting.py
+  # my_hotel/local_setting.py
 
   DATABASES = {
       "default": {
