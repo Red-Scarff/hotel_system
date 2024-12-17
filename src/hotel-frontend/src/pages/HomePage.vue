@@ -24,6 +24,12 @@
           <p>查看和管理预订记录。</p>
           <router-link to="/booking-management" class="btn">进入</router-link>
         </div>
+
+        <div class="card">
+          <h2>客户管理</h2>
+          <p>查看和管理所有客户信息。</p>
+          <router-link to="/room-management" class="btn">进入</router-link>
+        </div>
       </section>
     </main>
   </div>

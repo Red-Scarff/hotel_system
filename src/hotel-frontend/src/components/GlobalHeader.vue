@@ -73,16 +73,28 @@ const items = ref<MenuProps["items"]>([
     title: "用户注册",
   },
   {
-    key: "/admin/userManage",
+    key: "/admin/hotelManage",
     icon: () => h(CrownOutlined),
-    label: "管理后台",
-    title: "管理后台",
+    label: "酒店信息管理",
+    title: "酒店信息管理",
   },
   {
-    key: "/settings",
-    icon: () => h(SettingOutlined),
-    label: "设置",
-    title: "设置",
+    key: "/admin/roomManage",
+    icon: () => h(CrownOutlined),
+    label: "房间管理",
+    title: "房间管理",
+  },
+  {
+    key: "/admin/bookingManage",
+    icon: () => h(CrownOutlined),
+    label: "预订管理",
+    title: "预订管理",
+  },
+  {
+    key: "/admin/userManage",
+    icon: () => h(CrownOutlined),
+    label: "客户管理",
+    title: "客户管理",
   },
 ]);
 </script>

@@ -4,6 +4,9 @@ import HomePage from "@/pages/HomePage.vue";
 import UserLoginPage from "@/pages/user/UserLoginPage.vue";
 import UserRegisterPage from "@/pages/user/UserRegisterPage.vue";
 import UserManagePage from "@/pages/admin/UserManagePage.vue";
+import HotelManagePage from "@/pages/admin/HotelManagePage.vue";
+import RoomManagePage from "@/pages/admin/RoomManagePage.vue";
+import BookingManagePage from "@/pages/admin/BookingManagePage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,6 +28,21 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin/userManage",
     name: "adminUserManage",
     component: UserManagePage,
+  },
+  {
+    path: "/admin/hotelManage",
+    name: "adminHotelManage",
+    component: HotelManagePage,
+  },
+  {
+    path: "/admin/RoomManage",
+    name: "adminRoomManage",
+    component: RoomManagePage,
+  },
+  {
+    path: "/admin/bookingManage",
+    name: "adminBookingManage",
+    component: BookingManagePage,
   },
 ];
 

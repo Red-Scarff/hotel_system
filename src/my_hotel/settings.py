@@ -87,18 +87,16 @@ WSGI_APPLICATION = "my_hotel.wsgi.application"
 #     }
 # }
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "my_hotel",
-#         "USER": "postgres",
-#         "PASSWORD": "gz5971",
-#         "HOST": "127.0.0.1",
-#         "PORT": "5432",
-#     }
-# }
-
-DATABASES = Local_DATABASES
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "my_hotel",
+        "USER": "postgres",
+        "PASSWORD": "wzj040830",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
+    }
+}
 
 
 # Password validation
@@ -143,4 +141,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'hotel.User'
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",  # 允许来自该地址的跨域请求
+]
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
