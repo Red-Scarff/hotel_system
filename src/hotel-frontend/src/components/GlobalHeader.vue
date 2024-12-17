@@ -89,7 +89,7 @@ const items = ref<MenuProps["items"]>([
 <style scoped>
 /* 顶部导航栏整体样式 */
 .header-container {
-  background: linear-gradient(90deg, #a0b9c8, #89a3b8);
+  /* background: linear-gradient(90deg, #a0b9c8, #89a3b8); */
   /* 渐变背景 */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   /* 添加轻微阴影 */

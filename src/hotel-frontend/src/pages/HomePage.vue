@@ -2,7 +2,7 @@
   <div class="HomePage">
     <main class="main-content">
       <section class="welcome">
-        <h1>欢迎来到酒店管理系统</h1>
+        <h1>欢迎来到酒店预订管理系统</h1>
         <p>请选择您需要的服务</p>
       </section>
 
@@ -43,7 +43,7 @@ export default {
 .HomePage {
   font-family: "Arial", sans-serif;
   text-align: center;
-  background: url("../../eva.png") no-repeat center center fixed; /* 背景图片 */
+  background: url("../../jinx.jpg") no-repeat center center fixed; /* 背景图片 */
   background-size: cover; /* 背景覆盖整个页面 */
   position: relative; /* 需要为该元素设置相对定位 */
   min-height: 100vh; /* 保证页面最小高度 */
@@ -59,8 +59,19 @@ export default {
   background: rgba(255, 255, 255, 0.2); /* 半透明白色 */
   z-index: -1; /* 确保这个伪元素在图片和内容下层 */
 }
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 
 .welcome h1 {
+  margin-top: 150px;
   min-height: 50px;
   font-size: 42px;
   color: #ffffff;
