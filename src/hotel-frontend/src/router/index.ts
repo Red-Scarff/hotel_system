@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import HomeView from "../views/HomeView.vue";
 import HomePage from "@/pages/HomePage.vue";
 import UserLoginPage from "@/pages/user/UserLoginPage.vue";
-import UserRegisterPage from "@/pages/user/UserRegisterPage.vue";
+import UserBookingPage from "@/pages/user/UserBookingPage.vue";
 import UserManagePage from "@/pages/admin/UserManagePage.vue";
 import HotelManagePage from "@/pages/admin/HotelManagePage.vue";
 import RoomManagePage from "@/pages/admin/RoomManagePage.vue";
@@ -20,9 +19,9 @@ const routes: Array<RouteRecordRaw> = [
     component: UserLoginPage,
   },
   {
-    path: "/user/register",
-    name: "userRegister",
-    component: UserRegisterPage,
+    path: "/user/booking",
+    name: "userBooking",
+    component: UserBookingPage,
   },
   {
     path: "/admin/userManage",

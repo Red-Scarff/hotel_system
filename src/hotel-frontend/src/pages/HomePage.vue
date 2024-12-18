@@ -10,25 +10,25 @@
         <div class="card">
           <h2>酒店信息管理</h2>
           <p>管理酒店的基本信息。</p>
-          <router-link to="/admin/HotelManage" class="btn">进入</router-link>
+          <a class="btn" @click="goToRoute('/admin/hotelManage')">进入</a>
         </div>
 
         <div class="card">
           <h2>房间管理</h2>
           <p>查看和管理所有房间信息。</p>
-          <router-link to="/admin/RoomManage" class="btn">进入</router-link>
+          <a class="btn" @click="goToRoute('/admin/roomManage')">进入</a>
         </div>
 
         <div class="card">
           <h2>预订管理</h2>
           <p>查看和管理预订记录。</p>
-          <router-link to="/admin/BookingManage" class="btn">进入</router-link>
+          <a class="btn" @click="goToRoute('/admin/bookingManage')">进入</a>
         </div>
 
         <div class="card">
           <h2>客户管理</h2>
           <p>查看和管理所有客户信息。</p>
-          <router-link to="/admin/UserManage" class="btn">进入</router-link>
+          <a class="btn" @click="goToRoute('/admin/userManage')">进入</a>
         </div>
       </section>
     </main>
@@ -36,12 +36,21 @@
 </template>
 
 <script>
+import { useRouter } from "vue-router";
+
 export default {
   name: "HomePage",
-  data() {
-    return {};
+  setup() {
+    const router = useRouter(); // 在 setup 中调用 useRouter
+
+    const goToRoute = (route) => {
+      router.push({ path: route }); // 安全地使用 router
+    };
+
+    return {
+      goToRoute,
+    };
   },
-  methods: {},
 };
 </script>
 
@@ -52,7 +61,7 @@ export default {
   background: url("../../jinx.jpg") no-repeat center center fixed; /* 背景图片 */
   background-size: cover; /* 背景覆盖整个页面 */
   position: relative; /* 需要为该元素设置相对定位 */
-  min-height: 100vh; /* 保证页面最小高度 */
+  min-height: 90vh; /* 保证页面最小高度 */
 }
 
 .HomePage::before {

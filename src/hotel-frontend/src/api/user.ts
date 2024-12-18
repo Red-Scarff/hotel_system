@@ -15,15 +15,6 @@ export const userLogin = async (params: any) => {
     url: "/users/login/",
     method: "POST",
     data: params,
-    withCredentials: true,
-  });
-};
-
-// 获取用户信息
-export const getCurrentUser = async () => {
-  return await myAxios.request({
-    url: "/api/user/current",
-    method: "GET",
   });
 };
 
@@ -48,39 +39,56 @@ export const searchUsers = async () => {
   });
 };
 
-export const deleteHotels = async (id: number) => {
+export const deleteHotels = async (formState: any) => {
+  const { id, mode, token, ...hotelData } = formState;
   return await myAxios.request({
     url: `/hotels/${id}/`, // 使用模板字符串来插入 id
     method: "DELETE",
+    headers: {
+      Authorization: `Token ${token}`, // 添加Authorization头
+    },
   });
 };
 
-export const searchHotels = async (id: any) => {
-  return await myAxios.request({
-    url: "/hotels/",
-    method: "GET",
-    // params: {
-    //   id,
-    // },
-  });
+export const searchHotels = async (info: any = "") => {
+  // 将 info 的默认值设置为空字符串
+  if (info) {
+    // 简化判断条件
+    // console.log(`/hotels/?search=${info}/`);
+    return await myAxios.request({
+      url: `/hotels/?search=${info}`,
+      method: "GET",
+    });
+  } else {
+    return await myAxios.request({
+      url: "/hotels/",
+      method: "GET",
+    });
+  }
 };
 
 // 编辑酒店信息
 export const editHotels = async (formState: any) => {
-  const { id, mode, ...hotelData } = formState;
+  const { id, mode, token, ...hotelData } = formState;
   return await myAxios.request({
     url: `/hotels/${id}/`,
     method: "PUT",
+    headers: {
+      Authorization: `Token ${token}`, // 添加Authorization头
+    },
     data: hotelData, // 发送酒店数据（不包括 ID）
   });
 };
 
 // 添加酒店信息
 export const addHotels = async (formState: any) => {
-  const { id, mode, ...hotelData } = formState;
+  const { id, mode, token, ...hotelData } = formState;
   return await myAxios.request({
     url: "/hotels/",
     method: "POST",
+    headers: {
+      Authorization: `Token ${token}`, // 添加Authorization头
+    },
     data: hotelData, // 发送酒店数据（不包括 ID）
   });
 };

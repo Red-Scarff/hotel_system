@@ -6,7 +6,7 @@
         <a-input-search
           class="search-input"
           v-model:value="searchValue"
-          placeholder="输入要查询的酒店"
+          placeholder="输入要查询的酒店信息"
           enter-button="搜索"
           size="large"
           @search="onSearch"
@@ -102,6 +102,10 @@ import { message } from "ant-design-vue";
 import { reactive, ref, toRaw } from "vue";
 import type { FormInstance } from "ant-design-vue";
 import { DownOutlined } from "@ant-design/icons-vue";
+import { useLoginUserStore } from "@/store/useLoginUserStore";
+import { watch } from "vue";
+
+const loginUserStore = useLoginUserStore();
 
 interface Values {
   id: number;
@@ -110,6 +114,7 @@ interface Values {
   phone: string;
   email: string;
   mode: string;
+  token: string;
 }
 
 // Ref 和响应式对象
@@ -121,10 +126,24 @@ const formState = reactive<Values>({
   phone: "",
   email: "",
   mode: "",
+  token: "",
 });
+
 const searchValue = ref<string>("");
 const data = ref<any[]>([]);
 const visible = ref(false);
+
+// 监控 loginUserStore.loginUser 的变化，并更新 formState.token
+watch(
+  () => loginUserStore.loginUser,
+  (newLoginUser) => {
+    if (newLoginUser && newLoginUser.token) {
+      // console.log(`用户的token: ${newLoginUser.token}`);
+      formState.token = newLoginUser.token;
+    }
+  },
+  { immediate: true } // 使用 immediate: true 确保初始化时也会更新 token
+);
 
 // 表格列定义
 const columns = [
@@ -137,9 +156,10 @@ const columns = [
 ];
 
 // 获取数据并更新表格
-const fetchData = async (name = "") => {
+const fetchData = async (info = "") => {
   try {
-    const response = await searchHotels(name);
+    const response = await searchHotels(info);
+    // console.log(response);
     data.value = response.data;
   } catch (error) {
     message.error("请求失败，请重试");
@@ -200,6 +220,7 @@ const onOk = () => {
     .then(async (values) => {
       try {
         if (formState.mode === "add") {
+          // console.log(toRaw(formState));
           await addHotels(toRaw(formState)); // 调用添加酒店的函数
           message.success("酒店添加成功");
         } else if (formState.mode === "edit") {
@@ -227,7 +248,7 @@ const onCancel = () => {
 const handleDelete = async (record?: any) => {
   if (record && record.id) {
     try {
-      await deleteHotels(record.id);
+      await deleteHotels(record);
       message.success("删除成功");
       fetchData();
     } catch (error) {
@@ -261,7 +282,7 @@ const handleAdd = () => {
 /* 按钮样式 */
 .add-button {
   text-align: right; /* 使按钮靠右 */
-  margin-right: 27px;
+  margin-right: 67px;
 }
 
 .add-button .ant-btn {

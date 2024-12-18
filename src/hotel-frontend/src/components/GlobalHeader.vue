@@ -12,10 +12,12 @@
           @click="handleClick"
         />
       </a-col>
-      <a-col flex="80px">
+      <a-col flex="120px">
         <div class="user-login-status">
-          <div v-if="loginUserStore.loginUser.id">
-            {{ useLoginUserStore.loginUser.username ?? "请起一个名字" }}
+          <div v-if="loginUserStore.loginUser.username">
+            <span class="username">{{
+              loginUserStore.loginUser.username
+            }}</span>
           </div>
           <div v-else>
             <a-button type="primary" @click="handleButtonClick">登录</a-button>
@@ -25,21 +27,22 @@
     </a-row>
   </div>
 </template>
+
 <script lang="ts" setup>
-import { h, ref } from "vue";
+import { h, ref, watchEffect } from "vue";
 import {
   HomeOutlined,
   CrownOutlined,
   UserOutlined,
-  SettingOutlined,
 } from "@ant-design/icons-vue";
 import { MenuProps } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import { useLoginUserStore } from "@/store/useLoginUserStore";
 
 const loginUserStore = useLoginUserStore();
-
 const router = useRouter();
+const current = ref<string[]>([]);
+
 const handleClick = ({ key }: { key: string }) => {
   router.push({ path: key });
 };
@@ -47,10 +50,10 @@ const handleClick = ({ key }: { key: string }) => {
 const handleButtonClick = () => {
   router.push({ path: "/user/login" });
 };
-const current = ref<string[]>(["mail"]);
 
-router.afterEach((to, from, failure) => {
-  current.value = [to.path];
+// 监听路由变化并更新 current
+watchEffect(() => {
+  current.value = [router.currentRoute.value.path];
 });
 
 const items = ref<MenuProps["items"]>([
@@ -67,10 +70,10 @@ const items = ref<MenuProps["items"]>([
     title: "用户登录",
   },
   {
-    key: "/user/register",
+    key: "/user/booking",
     icon: () => h(UserOutlined),
-    label: "用户注册",
-    title: "用户注册",
+    label: "我要预订",
+    title: "我要预订",
   },
   {
     key: "/admin/hotelManage",
@@ -183,5 +186,11 @@ const items = ref<MenuProps["items"]>([
   align-items: center;
   height: 100%;
   /* 高度填满父容器 */
+}
+.username {
+  font-weight: bold; /* 加粗用户名 */
+  font-size: 1.1rem; /* 增加字体大小，使其更突出 */
+  color: #ffffff; /* 设置字体颜色为白色，这样可以和紫色背景形成对比 */
+  border-radius: 5px; /* 边框圆角，增加整体的美感 */
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div id="UserLoginPage">
     <main class="main-content">
-      <h1 class="title">用户登录</h1>
+      <h1 class="title">请输入预订相关信息</h1>
       <div class="form-container">
         <a-form
           class="login-form"
