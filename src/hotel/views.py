@@ -4,14 +4,14 @@ from rest_framework import viewsets, status, permissions, filters
 
 from .models import Hotel, Room, Booking
 from hotel.serializers import HotelSerializer, RoomSerializer, BookingSerializer, UserSerializer
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from rest_framework.decorators import action
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.contrib.auth import authenticate
 
 from .permissions import IsCustomerReadOnly
+from rest_framework.authtoken.models import Token
 
 import django_filters.rest_framework
 
@@ -41,22 +41,7 @@ class BookingViewSet(viewsets.ModelViewSet):
     serializer_class = BookingSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['customer_name']  # 支持搜索的字段  
-
-class LoginView(APIView):
-    def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            if user.is_customer():
-                return Response({'message': 'Logged in as Customer'}, status=status.HTTP_200_OK)
-            elif user.is_manager():
-                return Response({'message': 'Logged in as Hotel Manager'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'message': 'Role not recognized'}, status=status.HTTP_403_FORBIDDEN)
-        else:
-            return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+    permission_classes = [permissions.IsAuthenticated()]
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -97,10 +82,13 @@ class UserViewSet(viewsets.ModelViewSet):
             role = 'manager'
         else:
             return Response({'message': 'Role not recognized'}, status=status.HTTP_403_FORBIDDEN)
+        
+        token, created = Token.objects.get_or_create(user=user)
 
         # Return the token and user details
         return Response({
             "message": "Login successful.",
+            "token": token.key,
             "role": role,
             "user": {
                 "id": user.id,
