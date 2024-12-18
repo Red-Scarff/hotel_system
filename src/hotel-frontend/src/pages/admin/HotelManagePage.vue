@@ -31,148 +31,192 @@
       </template>
     </a-table>
     <a-modal
+      class="visible-modal"
       v-model:open="visible"
       title="新的条目内容"
-      ok-text="Create"
-      cancel-text="Cancel"
+      ok-text="确定"
+      cancel-text="取消"
       @ok="onOk"
     >
-      <a-form
-        ref="formRef"
-        :model="formState"
-        layout="vertical"
-        name="form_in_modal"
-      >
-        <a-form-item
-          label="id"
-          :rules="[
-            {
-              required: true,
-              message: 'Please input the title of collection!',
-            },
-          ]"
+      <div style="margin-top: 20px">
+        <!-- 调整上方距离 -->
+        <a-form
+          ref="formRef"
+          :model="formState"
+          layout="vertical"
+          name="form_in_modal"
         >
-          <a-input v-model:value="formState.title" />
-        </a-form-item>
-        <a-form-item name="description" label="Description">
-          <a-textarea v-model:value="formState.description" />
-        </a-form-item>
-        <a-form-item
-          name="modifier"
-          class="collection-create-form_last-form-item"
-        >
-        </a-form-item>
-      </a-form>
+          <a-form-item
+            label="id"
+            :rules="[
+              {
+                required: true,
+                message: '请输入酒店id!',
+              },
+            ]"
+          >
+            <a-input v-model:value="formState.id" />
+          </a-form-item>
+          <a-form-item
+            label="酒店名"
+            :rules="[
+              {
+                required: true,
+                message: '请输入酒店名!',
+              },
+            ]"
+          >
+            <a-input v-model:value="formState.name" />
+          </a-form-item>
+          <a-form-item
+            label="地址"
+            :rules="[
+              {
+                required: true,
+                message: '请输入酒店地址!',
+              },
+            ]"
+          >
+            <a-input v-model:value="formState.location" />
+          </a-form-item>
+          <a-form-item
+            label="电话号"
+            :rules="[
+              {
+                required: true,
+                message: '请输入酒店电话号!',
+              },
+            ]"
+          >
+            <a-input v-model:value="formState.phone" />
+          </a-form-item>
+          <a-form-item
+            label="email"
+            :rules="[
+              {
+                required: true,
+                message: '请输入酒店email!',
+              },
+            ]"
+          >
+            <a-input v-model:value="formState.email" />
+          </a-form-item>
+        </a-form>
+      </div>
     </a-modal>
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { MenuProps } from "ant-design-vue";
-import { searchHotels, deleteHotels } from "@/api/user";
-import { SmileOutlined, DownOutlined } from "@ant-design/icons-vue";
-import { message, Modal, Form, Input } from "ant-design-vue";
+import { searchHotels, deleteHotels, editHotels } from "@/api/user";
+import { message } from "ant-design-vue";
 import { reactive, ref, toRaw } from "vue";
 import type { FormInstance } from "ant-design-vue";
 
 interface Values {
-  title: string;
-  description: string;
+  id: number;
+  name: string;
+  location: string;
+  phone: string;
+  email: string;
 }
 
+// Ref 和响应式对象
 const formRef = ref<FormInstance>();
 const formState = reactive<Values>({
-  title: "",
-  description: "",
+  id: 0,
+  name: "",
+  location: "",
+  phone: "",
+  email: "",
 });
-
 const searchValue = ref<string>("");
-
-// 表格列
-const columns = [
-  {
-    title: "id",
-    dataIndex: "id",
-  },
-  {
-    title: "酒店名",
-    dataIndex: "name",
-  },
-  {
-    title: "地址",
-    dataIndex: "location",
-  },
-  {
-    title: "电话",
-    dataIndex: "phone",
-  },
-  {
-    title: "email",
-    dataIndex: "email",
-  },
-  {
-    title: "操作",
-    key: "action",
-  },
-];
-
-// 用于存储表格数据的响应式对象
 const data = ref<any[]>([]);
+const visible = ref(false);
+const editingRecord = ref<any>({});
+
+// 表格列定义
+const columns = [
+  { title: "id", dataIndex: "id" },
+  { title: "酒店名", dataIndex: "name" },
+  { title: "地址", dataIndex: "location" },
+  { title: "电话", dataIndex: "phone" },
+  { title: "email", dataIndex: "email" },
+  { title: "操作", key: "action" },
+];
 
 // 获取数据并更新表格
 const fetchData = async (name = "") => {
   try {
-    const response = await searchHotels(name); // 调用封装好的接口函数
-    data.value = response.data; // 将返回的数据赋值给 data 响应式对象
+    const response = await searchHotels(name);
+    data.value = response.data;
   } catch (error) {
     message.error("请求失败，请重试");
   }
 };
 
+// 获取初始数据
+fetchData();
+
 // 搜索功能
 const onSearch = () => {
-  fetchData(searchValue.value); // 调用 fetchData 来进行数据获取
+  fetchData(searchValue.value);
 };
 
-// 编辑时的模态框数据
-const visible = ref(false); // 控制模态框是否显示
-const editingRecord = ref<any>({}); // 用于保存当前正在编辑的记录
+// 编辑功能
+const handleEdit = (record?: any) => {
+  visible.value = true;
+  if (record) {
+    editingRecord.value = record;
+    // 更新 formState
+    Object.assign(formState, record);
+  }
+};
 
 // 菜单点击事件
 const handleMenuClick: MenuProps["onClick"] = (e) => {
   switch (e.key) {
     case "1":
-      handleDelete();
+      handleDelete(editingRecord.value);
       break;
     case "2":
-      handleEdit();
+      handleEdit(editingRecord.value);
       break;
     default:
       break;
   }
 };
 
-//修改功能，弹出表单
-const handleEdit = (record?: any) => {
-  visible.value = true;
-  if (record) {
-    editingRecord.value = record;
-  }
-};
-
+// 确认按钮操作
 const onOk = () => {
   formRef.value
     .validateFields()
-    .then((values) => {
-      console.log("Received values of form: ", values);
-      console.log("formState: ", toRaw(formState));
-      visible.value = false;
-      formRef.value.resetFields();
-      console.log("reset formState: ", toRaw(formState));
+    .then(async (values) => {
+      try {
+        await editHotels(toRaw(formState));
+        message.success("酒店信息更新成功");
+      } catch (error) {
+        message.error("更新酒店信息失败");
+      }
+      resetForm();
     })
     .catch((info) => {
-      console.log("Validate Failed:", info);
+      console.log("表单验证失败:", info);
     });
+};
+
+// 重置表单状态
+const resetForm = () => {
+  visible.value = false;
+  Object.assign(formState, {
+    id: 0,
+    name: "",
+    location: "",
+    phone: "",
+    email: "",
+  });
+  formRef.value.resetFields();
 };
 
 // 删除功能
@@ -181,18 +225,14 @@ const handleDelete = async (record?: any) => {
     try {
       await deleteHotels(record.id);
       message.success("删除成功");
-      fetchData(); // 重新加载数据
+      fetchData();
     } catch (error) {
       message.error("删除失败，请重试");
-      console.error("Delete error:", error);
     }
   } else {
     message.warning("请选择要删除的记录");
   }
 };
-
-// 获取初始数据
-fetchData();
 </script>
 
 <style scoped>

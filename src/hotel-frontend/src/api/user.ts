@@ -63,6 +63,16 @@ export const searchHotels = async (id: any) => {
   });
 };
 
+// 编辑酒店信息
+export const editHotels = async (formState: any) => {
+  const { id, ...hotelData } = formState; // 解构出 id 和其他酒店数据
+  return await myAxios.request({
+    url: `/hotels/${id}/`, // 使用解构获取 id
+    method: "PUT",
+    data: hotelData, // 发送酒店数据（不包括 ID）
+  });
+};
+
 export const searchRooms = async () => {
   return await myAxios.request({
     url: "/rooms",
