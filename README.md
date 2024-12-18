@@ -1,5 +1,7 @@
 # hotel_system
 
+![image-20241219012430453](README.assets/image-20241219012430453.png)
+
 ### 1. **项目架构设计**
 
 - **后端 (Django)** ：Django 负责构建 RESTful API，用于处理数据库交互、业务逻辑和身份验证。
