@@ -12,9 +12,10 @@ export const userRegister = async (params: any) => {
 // 用户登录
 export const userLogin = async (params: any) => {
   return await myAxios.request({
-    url: "/api/user/login",
+    url: "/users/login/",
     method: "POST",
     data: params,
+    withCredentials: true,
   });
 };
 
@@ -40,6 +41,7 @@ export const searchUsers = async () => {
   return await myAxios.request({
     url: "/users",
     method: "GET",
+    withCredentials: true,
     // params: {
     //   username: username,
     // },
@@ -57,18 +59,28 @@ export const searchHotels = async (id: any) => {
   return await myAxios.request({
     url: "/hotels/",
     method: "GET",
-    params: {
-      id,
-    },
+    // params: {
+    //   id,
+    // },
   });
 };
 
 // 编辑酒店信息
 export const editHotels = async (formState: any) => {
-  const { id, ...hotelData } = formState; // 解构出 id 和其他酒店数据
+  const { id, mode, ...hotelData } = formState;
   return await myAxios.request({
-    url: `/hotels/${id}/`, // 使用解构获取 id
+    url: `/hotels/${id}/`,
     method: "PUT",
+    data: hotelData, // 发送酒店数据（不包括 ID）
+  });
+};
+
+// 添加酒店信息
+export const addHotels = async (formState: any) => {
+  const { id, mode, ...hotelData } = formState;
+  return await myAxios.request({
+    url: "/hotels/",
+    method: "POST",
     data: hotelData, // 发送酒店数据（不包括 ID）
   });
 };

@@ -11,7 +11,6 @@
           label-align="left"
           autocomplete="off"
           @finish="onFinish"
-          @finishFailed="onFinishFailed"
         >
           <a-form-item
             label="用户名"
@@ -78,15 +77,16 @@ const formState = reactive<FormState>({
 const router = useRouter();
 const loginUserStore = useLoginUserStore();
 const onFinish = async (values: any) => {
+  console.log(values);
   const res = await userLogin(values);
-  //登录成功，保存全局状态
-  if (res.code === 200 && res.data.data) {
-    await loginUserStore.fetchLoginUser();
-    message.success("登录成功");
-    router.push({ path: "/", replace: true });
-  } else {
-    message.error("登录失败");
-  }
+  // //登录成功，保存全局状态
+  // if (res && res.message === "Login successful.") {
+  //   await loginUserStore.fetchLoginUser();
+  //   message.success("登录成功");
+  //   router.push({ path: "/", replace: true });
+  // } else {
+  //   message.error("登录失败");
+  // }
 };
 </script>
 <style scoped>

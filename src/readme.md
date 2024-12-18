@@ -1,4 +1,4 @@
-+ 数据库设置
+- 数据库设置
 
 在my_hotel文件中新建local_setting.py
 
@@ -21,12 +21,12 @@
   }
 ```
 
-+ 数据库迁移
+- 数据库迁移
 
-`python manage.py makemigrations` or  `python manage.py makemigrations hotel`
+`python manage.py makemigrations` or `python manage.py makemigrations hotel`
 
 `python manage.py migrate`
 
-+ 启动后端
+- 启动后端
 
 `python manage.py runserver`

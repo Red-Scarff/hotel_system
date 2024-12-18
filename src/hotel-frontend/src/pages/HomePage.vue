@@ -10,25 +10,25 @@
         <div class="card">
           <h2>酒店信息管理</h2>
           <p>管理酒店的基本信息。</p>
-          <router-link to="/hotel-management" class="btn">进入</router-link>
+          <router-link to="/admin/HotelManage" class="btn">进入</router-link>
         </div>
 
         <div class="card">
           <h2>房间管理</h2>
           <p>查看和管理所有房间信息。</p>
-          <router-link to="/room-management" class="btn">进入</router-link>
+          <router-link to="/admin/RoomManage" class="btn">进入</router-link>
         </div>
 
         <div class="card">
           <h2>预订管理</h2>
           <p>查看和管理预订记录。</p>
-          <router-link to="/booking-management" class="btn">进入</router-link>
+          <router-link to="/admin/BookingManage" class="btn">进入</router-link>
         </div>
 
         <div class="card">
           <h2>客户管理</h2>
           <p>查看和管理所有客户信息。</p>
-          <router-link to="/room-management" class="btn">进入</router-link>
+          <router-link to="/admin/UserManage" class="btn">进入</router-link>
         </div>
       </section>
     </main>
