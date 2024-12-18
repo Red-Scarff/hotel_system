@@ -143,15 +143,15 @@
 
 通过 `ViewSet`，我们可以自动获得以下常用的 API 接口：
 
-| **HTTP 方法** | **URL 动作**      | **描述**                             |
-| ------------------- | ----------------------- | ------------------------------------------ |
-| `GET`             | `/api/resource/`      | 列出所有资源（List）                       |
-| `POST`            | `/api/resource/`      | 创建一个新的资源（Create）                 |
-| `GET`             | `/api/resource/{id}/` | 获取单个资源的详细信息（Retrieve）         |
-| `PUT`             | `/api/resource/{id}/` | 更新单个资源（完全更新）（Update）         |
-| `PATCH`           | `/api/resource/{id}/` | 更新单个资源（部分更新）（Partial Update） |
-| `DELETE`          | `/api/resource/{id}/` | 删除单个资源（Delete）                     |
-
+| **HTTP 方法** | **URL 动作**     | **描述**                             |
+| ------------------- | ---------------------- | ------------------------------------------ |
+| `GET`             | `/resource/`         | 列出所有资源（List）                       |
+| `POST`            | `/resource/`         | 创建一个新的资源（Create）                 |
+| `GET`             | `/resource/{id}/`    | 获取单个资源的详细信息（Retrieve）         |
+| `PUT`             | `/resource/{id}/`    | 更新单个资源（完全更新）（Update）         |
+| `PATCH`           | `/resource/{id}/`    | 更新单个资源（部分更新）（Partial Update） |
+| `DELETE`          | `/resource/{id}/`    | 删除单个资源（Delete）                     |
+| `GET`             | `/resource/?search=` | 搜索资源 (Search)                          |
 
 ## 6. 前端开发 (Vue)
 

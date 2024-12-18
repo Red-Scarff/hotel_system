@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from rest_framework import viewsets, status, permissions
+from rest_framework import viewsets, status, permissions, filters
 
 from .models import Hotel, Room, Booking
 from hotel.serializers import HotelSerializer, RoomSerializer, BookingSerializer, UserSerializer
@@ -12,23 +12,34 @@ from django.contrib.auth import authenticate
 
 from .permissions import IsCustomerReadOnly
 
+import django_filters.rest_framework
+
 
 class HotelViewSet(viewsets.ModelViewSet):
 
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
     permission_classes = [IsCustomerReadOnly]
+    # filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    # filterset_fields = ['name', 'location']
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'location']  # 支持搜索的字段  
     
 class RoomViewSet(viewsets.ModelViewSet):
 
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
+    permission_classes = [IsCustomerReadOnly]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['hotel', 'room_type']  # 支持搜索的字段  
 
     
 class BookingViewSet(viewsets.ModelViewSet):
 
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['customer_name']  # 支持搜索的字段  
 
 class LoginView(APIView):
     def post(self, request):

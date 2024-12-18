@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'hotel',
     'corsheaders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -84,17 +85,6 @@ WSGI_APPLICATION = "my_hotel.wsgi.application"
 #     "default": {
 #         "ENGINE": "django.db.backends.sqlite3",
 #         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "my_hotel",
-#         "USER": "postgres",
-#         "PASSWORD": "gz5971",
-#         "HOST": "127.0.0.1",
-#         "PORT": "5432",
 #     }
 # }
 
@@ -144,3 +134,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = 'hotel.User'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}

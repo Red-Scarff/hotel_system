@@ -9,7 +9,7 @@
 ```
   # my_hotel/local_setting.py
 
-  DATABASES = {
+  Local_DATABASES = {
       "default": {
           "ENGINE": "django.db.backends.postgresql",
           "NAME": "my_hotel",
