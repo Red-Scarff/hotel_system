@@ -2,51 +2,59 @@
   <div id="UserLoginPage">
     <main class="main-content">
       <h1 class="title">用户登录</h1>
-      <a-form
-        class="login-form"
-        style="max-width: 480px; margin: 0 auto"
-        :model="formState"
-        name="basic"
-        label-align="left"
-        autocomplete="off"
-        @finish="onFinish"
-        @finishFailed="onFinishFailed"
-      >
-        <a-form-item
-          label="用户名"
-          name="username"
-          :rules="[{ required: true, message: '请输入用户名' }]"
+      <div class="form-container">
+        <a-form
+          class="login-form"
+          style="max-width: 480px; margin: 0 auto"
+          :model="formState"
+          name="basic"
+          label-align="left"
+          autocomplete="off"
+          @finish="onFinish"
+          @finishFailed="onFinishFailed"
         >
-          <a-input
-            v-model:value="formState.username"
-            placeholder="请输入用户名"
-          />
-        </a-form-item>
+          <a-form-item
+            label="用户名"
+            name="username"
+            :rules="[{ required: true, message: '请输入用户名' }]"
+          >
+            <a-input
+              v-model:value="formState.username"
+              placeholder="请输入用户名"
+            />
+          </a-form-item>
 
-        <a-form-item
-          label="密码"
-          name="password"
-          :rules="[
-            { required: true, message: '请输入密码' },
-            { min: 6, message: '密码长度至少6位' },
-          ]"
-        >
-          <a-input-password
-            v-model:value="formState.password"
-            placeholder="请输入密码"
-          />
-        </a-form-item>
+          <a-form-item
+            label="密码"
+            name="password"
+            :labelCol="{ style: { color: '#fff' } }"
+            :rules="[
+              { required: true, message: '请输入密码' },
+              { min: 6, message: '密码长度至少6位' },
+            ]"
+          >
+            <!-- <template #label>
+            <span style="font-size: 16px; color: #f8f2f2; margin-bottom: 10px"
+              >密码：</span
+            >
+          </template> -->
+            <a-input-password
+              v-model:value="formState.password"
+              placeholder="请输入密码"
+            />
+          </a-form-item>
 
-        <!-- <a-form-item name="remember" :wrapper-col="{ offset: 8, span: 16 }">
+          <!-- <a-form-item name="remember" :wrapper-col="{ offset: 8, span: 16 }">
         <a-checkbox v-model:checked="formState.remember"
           >Remember me</a-checkbox
         >
       </a-form-item> -->
 
-        <a-form-item style="margin-top: 50px">
-          <a-button type="primary" html-type="submit">登录</a-button>
-        </a-form-item>
-      </a-form>
+          <a-form-item style="margin-top: 50px">
+            <a-button type="primary" html-type="submit">登录</a-button>
+          </a-form-item>
+        </a-form>
+      </div>
     </main>
   </div>
 </template>
@@ -101,6 +109,10 @@ const onFinish = async (values: any) => {
   background: rgba(255, 255, 255, 0.2); /* 半透明白色 */
   z-index: -1; /* 确保这个伪元素在图片和内容下层 */
 }
+.ant-form-item-label > label {
+  color: white !important;
+}
+
 .main-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -123,5 +135,17 @@ const onFinish = async (values: any) => {
   margin-top: 50px;
   max-width: 480px;
   margin: 0 auto;
+}
+.form-container {
+  background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
+  border-radius: 10px; /* 圆角 */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+  padding: 30px; /* 内边距 */
+  margin: 20px auto; /* 上下边距 */
+  transition: transform 0.3s ease; /* 平滑的动画效果 */
+}
+
+.form-container:hover {
+  transform: translateY(-5px); /* 鼠标悬停时轻微上升效果 */
 }
 </style>
