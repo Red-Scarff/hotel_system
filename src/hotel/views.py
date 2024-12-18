@@ -5,6 +5,7 @@ from rest_framework import viewsets, status, permissions, filters
 from .models import Hotel, Room, Booking
 from hotel.serializers import HotelSerializer, RoomSerializer, BookingSerializer, UserSerializer
 from django.contrib.auth import get_user_model
+from rest_framework.decorators import action
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -72,3 +73,38 @@ class UserViewSet(viewsets.ModelViewSet):
         if self.action == 'create':  # 注册
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated()]  # 其他操作需要认证
+
+
+    @action(detail=False, methods=['post'], url_path='login')
+    def login(self, request):
+        """
+        Custom login action for UserViewSet.
+        """
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        if not username or not password:
+            return Response({"error": "Username and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Authenticate user
+        user = authenticate(request, username=username, password=password)
+        if not user:
+            return Response({"error": "Invalid username or password."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        if user.is_customer():
+            role = 'customer'
+        elif user.is_manager():
+            role = 'manager'
+        else:
+            return Response({'message': 'Role not recognized'}, status=status.HTTP_403_FORBIDDEN)
+
+        # Return the token and user details
+        return Response({
+            "message": "Login successful.",
+            "role": role,
+            "user": {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+            }
+        }, status=status.HTTP_200_OK)

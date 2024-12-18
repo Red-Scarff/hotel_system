@@ -141,7 +141,7 @@
 
 ## 5. 后端开发 (Python + Django)
 
-通过 `ViewSet`，我们可以自动获得以下常用的 API 接口：
+使用resource表示hotel, User, Booking, Room, 我们实现了以下API 接口：
 
 | **HTTP 方法** | **URL 动作**     | **描述**                             |
 | ------------------- | ---------------------- | ------------------------------------------ |
@@ -152,6 +152,7 @@
 | `PATCH`           | `/resource/{id}/`    | 更新单个资源（部分更新）（Partial Update） |
 | `DELETE`          | `/resource/{id}/`    | 删除单个资源（Delete）                     |
 | `GET`             | `/resource/?search=` | 搜索资源 (Search)                          |
+| `POST`            | `/User/login/`       | 登录 (Login)                               |
 
 ## 6. 前端开发 (Vue)
 
