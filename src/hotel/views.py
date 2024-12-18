@@ -70,7 +70,7 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         根据请求方法设置不同权限
         """
-        if self.action == 'create':  # 注册
+        if self.action == 'create' or self.action == 'login':  # 注册
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated()]  # 其他操作需要认证
 
