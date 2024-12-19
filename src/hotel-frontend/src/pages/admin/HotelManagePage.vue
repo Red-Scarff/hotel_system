@@ -28,7 +28,7 @@
         <template v-if="column.key === 'action'">
           <a-dropdown>
             <template #overlay>
-              <a-menu @click="handleMenuClick">
+              <a-menu>
                 <a-menu-item key="1" @click="() => handleDelete(record)"
                   >删除</a-menu-item
                 >
@@ -160,7 +160,7 @@ const fetchData = async (info = "") => {
   try {
     const response = await searchHotels(info);
     // console.log(response);
-    data.value = response.data;
+    data.value = [...response.data]; // 强制替换，确保 Vue 能感知到变化
   } catch (error) {
     message.error("请求失败，请重试");
   }
@@ -182,20 +182,6 @@ const handleEdit = (record?: any) => {
     Object.assign(formState, record);
     formState.mode = "edit";
     console.log(formState);
-  }
-};
-
-// 菜单点击事件
-const handleMenuClick: MenuProps["onClick"] = (e) => {
-  switch (e.key) {
-    case "1":
-      handleDelete();
-      break;
-    case "2":
-      handleEdit();
-      break;
-    default:
-      break;
   }
 };
 
@@ -227,6 +213,7 @@ const onOk = () => {
           await editHotels(toRaw(formState)); // 调用编辑酒店的函数
           message.success("酒店信息更新成功");
         }
+        fetchData();
       } catch (error) {
         message.error(
           formState.mode === "add" ? "添加酒店失败" : "更新酒店信息失败"
@@ -246,17 +233,10 @@ const onCancel = () => {
 
 // 删除功能
 const handleDelete = async (record?: any) => {
-  if (record && record.id) {
-    try {
-      await deleteHotels(record);
-      message.success("删除成功");
-      fetchData();
-    } catch (error) {
-      message.error("删除失败，请重试");
-    }
-  } else {
-    message.warning("请选择要删除的记录");
-  }
+  // console.log(`record.id: ${record.id}, formState.token: ${formState.token}`);
+  await deleteHotels(record.id, formState.token);
+  message.success("删除成功");
+  fetchData();
 };
 
 // 添加功能

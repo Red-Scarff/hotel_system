@@ -1,14 +1,4 @@
 import myAxios from "@/request";
-
-// 用户注册
-export const userRegister = async (params: any) => {
-  return await myAxios.request({
-    url: "/api/user/register",
-    method: "POST",
-    data: params,
-  });
-};
-
 // 用户登录
 export const userLogin = async (params: any) => {
   return await myAxios.request({
@@ -18,34 +8,67 @@ export const userLogin = async (params: any) => {
   });
 };
 
-// 用户注销
-export const userLogout = async (params: any) => {
+export const deleteUsers = async (id: number, token: string) => {
+  // 发起删除请求
   return await myAxios.request({
-    url: "/api/user/logout",
-    method: "POST",
-    data: params,
-  });
-};
-
-// 获取用户列表
-export const searchUsers = async () => {
-  return await myAxios.request({
-    url: "/users",
-    method: "GET",
-    withCredentials: true,
-    // params: {
-    //   username: username,
-    // },
-  });
-};
-
-export const deleteHotels = async (formState: any) => {
-  const { id, mode, token, ...hotelData } = formState;
-  return await myAxios.request({
-    url: `/hotels/${id}/`, // 使用模板字符串来插入 id
+    url: `/users/${id}/`, // 使用模板字符串来插入 ID
     method: "DELETE",
     headers: {
+      Authorization: `Token ${token}`, // 添加 Authorization 请求头
+    },
+  });
+};
+
+export const searchUsers = async (info: any = "") => {
+  // 将 info 的默认值设置为空字符串
+  if (info) {
+    // 简化判断条件
+    // console.log(`/hotels/?search=${info}/`);
+    return await myAxios.request({
+      url: `/users/?search=${info}`,
+      method: "GET",
+    });
+  } else {
+    return await myAxios.request({
+      url: "/users/",
+      method: "GET",
+    });
+  }
+};
+
+// 编辑用户信息
+export const editUsers = async (formState: any) => {
+  const { id, mode, token, ...userData } = formState;
+  return await myAxios.request({
+    url: `/users/${id}/`,
+    method: "PUT",
+    headers: {
       Authorization: `Token ${token}`, // 添加Authorization头
+    },
+    data: userData,
+  });
+};
+
+// 添加用户信息
+export const addUsers = async (formState: any) => {
+  const { id, mode, token, ...userData } = formState;
+  return await myAxios.request({
+    url: "/users/",
+    method: "POST",
+    headers: {
+      Authorization: `Token ${token}`, // 添加Authorization头
+    },
+    data: userData,
+  });
+};
+
+export const deleteHotels = async (id: number, token: string) => {
+  // 发起删除请求
+  return await myAxios.request({
+    url: `/hotels/${id}/`, // 使用模板字符串来插入酒店 ID
+    method: "DELETE",
+    headers: {
+      Authorization: `Token ${token}`, // 添加 Authorization 请求头
     },
   });
 };

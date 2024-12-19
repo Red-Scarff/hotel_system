@@ -96,8 +96,8 @@ const items = ref<MenuProps["items"]>([
   {
     key: "/admin/userManage",
     icon: () => h(CrownOutlined),
-    label: "客户管理",
-    title: "客户管理",
+    label: "用户管理",
+    title: "用户管理",
   },
 ]);
 </script>
