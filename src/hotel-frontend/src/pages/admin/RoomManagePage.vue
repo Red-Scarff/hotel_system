@@ -1,5 +1,5 @@
 <template>
-  <div id="user-manage-page">
+  <div id="room-manage-page">
     <a-row class="container">
       <!-- 搜索框 -->
       <a-col flex="auto">
@@ -64,31 +64,44 @@
         style="padding-top: 20px"
       >
         <a-form-item
-          label="酒店名"
-          :rules="[{ required: true, message: '请输入酒店名!' }]"
+          label="所属酒店"
+          :rules="[{ required: true, message: '请输入所属酒店!' }]"
         >
-          <a-input v-model:value="formState.name" />
+          <a-select v-model:value="formState.hotel" placeholder="选择酒店">
+            <a-select-option
+              v-for="hotel in hotelOptions"
+              :key="hotel.value"
+              :value="hotel.value"
+            >
+              {{ hotel.label }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item
+          label="房间类型"
+          :rules="[{ required: true, message: '请输入房间类型!' }]"
+        >
+          <a-input v-model:value="formState.room_type" />
+        </a-form-item>
+        <a-form-item
+          label="容纳人数"
+          :rules="[{ required: true, message: '请输入容纳人数!' }]"
+        >
+          <a-input v-model:value="formState.capacity" />
         </a-form-item>
 
         <a-form-item
-          label="地址"
-          :rules="[{ required: true, message: '请输入酒店地址!' }]"
+          label="每晚价格"
+          :rules="[{ required: true, message: '请输入每晚价格!' }]"
         >
-          <a-input v-model:value="formState.location" />
+          <a-input v-model:value="formState.price" />
         </a-form-item>
 
         <a-form-item
-          label="电话号"
-          :rules="[{ required: true, message: '请输入酒店电话号!' }]"
+          label="房间描述"
+          :rules="[{ required: false, message: '请输入房间描述!' }]"
         >
-          <a-input v-model:value="formState.phone" />
-        </a-form-item>
-
-        <a-form-item
-          label="email"
-          :rules="[{ required: true, message: '请输入酒店email!' }]"
-        >
-          <a-input v-model:value="formState.email" />
+          <a-input v-model:value="formState.description" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -97,7 +110,14 @@
 
 <script lang="ts" setup>
 import type { MenuProps } from "ant-design-vue";
-import { searchHotels, deleteHotels, editHotels, addHotels } from "@/api/user";
+import {
+  searchRooms,
+  deleteRooms,
+  editRooms,
+  addRooms,
+  searchHotels_byid,
+  searchHotels,
+} from "@/api/user";
 import { message } from "ant-design-vue";
 import { reactive, ref, toRaw } from "vue";
 import type { FormInstance } from "ant-design-vue";
@@ -105,14 +125,44 @@ import { DownOutlined } from "@ant-design/icons-vue";
 import { useLoginUserStore } from "@/store/useLoginUserStore";
 import { watch } from "vue";
 
+const hotelOptions = ref<{ value: string; label: string }[]>([]); // 存储酒店选项
+const loadingHotelData = ref(false); // 用于控制加载状态
+// 获取酒店信息并处理成下拉框需要的格式
+const fetchHotelOptions = async () => {
+  loadingHotelData.value = true; // 设置为加载状态
+  try {
+    const response = await searchHotels(); // 调用 API 获取酒店数据
+    if (response && Array.isArray(response.data)) {
+      // 处理酒店数据并生成下拉框选项
+      hotelOptions.value = response.data.map((hotel: any) => ({
+        value: hotel.id, // 使用酒店的 id 作为 value
+        label: `${hotel.name} - ${hotel.location}`, // 将酒店名称和地址结合为 label
+      }));
+    } else {
+      hotelOptions.value = []; // 如果没有酒店数据，清空选项
+    }
+  } catch (error) {
+    console.error("获取酒店信息失败:", error);
+    message.error("获取酒店信息失败，请重试！");
+  } finally {
+    loadingHotelData.value = false; // 结束加载状态
+  }
+};
+
+// 在组件加载时获取酒店信息
+fetchHotelOptions();
+
 const loginUserStore = useLoginUserStore();
 
 interface Values {
   id: number;
-  name: string;
-  location: string;
-  phone: string;
-  email: string;
+  hotel_name: string;
+  hotel_location: string;
+  hotel: number;
+  room_type: string;
+  capacity: number;
+  price: number;
+  description: string;
   mode: string;
   token: string;
 }
@@ -121,10 +171,13 @@ interface Values {
 const formRef = ref<FormInstance>();
 const formState = reactive<Values>({
   id: 0,
-  name: "",
-  location: "",
-  phone: "",
-  email: "",
+  hotel_name: "",
+  hotel_location: "",
+  hotel: 0,
+  room_type: "",
+  capacity: 0,
+  price: 0,
+  description: "",
   mode: "",
   token: "",
 });
@@ -147,31 +200,68 @@ watch(
 
 // 表格列定义
 const columns = [
-  { title: "id", dataIndex: "id" },
-  { title: "酒店名", dataIndex: "name" },
-  { title: "地址", dataIndex: "location" },
-  { title: "电话", dataIndex: "phone" },
-  { title: "email", dataIndex: "email" },
+  { title: "房间id", dataIndex: "id" },
+  { title: "所属酒店id", dataIndex: "hotel" },
+  { title: "所属酒店名", dataIndex: "hotel_name" },
+  { title: "所属酒店地址", dataIndex: "hotel_location" },
+  { title: "房间类型", dataIndex: "room_type" },
+  { title: "容纳人数", dataIndex: "capacity" },
+  { title: "每晚价格", dataIndex: "price" },
+  { title: "房间描述", dataIndex: "description" },
   { title: "操作", key: "action" },
 ];
 
 // 获取数据并更新表格
-const fetchData = async (info = "") => {
+const fetchData = async (info = "", token: string) => {
   try {
-    const response = await searchHotels(info);
+    // 请求房间数据
+    const response = await searchRooms(info, token);
     // console.log(response);
-    data.value = [...response.data]; // 强制替换，确保 Vue 能感知到变化
+
+    // 检查响应是否包含有效数据
+    if (response && Array.isArray(response.data) && response.data.length > 0) {
+      const roomDataWithHotelInfo = [];
+
+      // 遍历房间数据数组
+      for (let room of response.data) {
+        // 请求酒店数据
+        const hotel_res = await searchHotels_byid(room.hotel);
+
+        if (hotel_res && hotel_res.data) {
+          // 将酒店信息添加到房间数据
+          roomDataWithHotelInfo.push({
+            ...room,
+            hotel_name: hotel_res.data.name,
+            hotel_location: hotel_res.data.location,
+          });
+        } else {
+          // 如果获取酒店信息失败，依然将房间数据添加到数组中，但不添加酒店信息
+          roomDataWithHotelInfo.push({
+            ...room,
+            hotel_name: "未知酒店",
+            hotel_location: "未知位置",
+          });
+        }
+      }
+
+      // 更新房间数据列表
+      data.value = roomDataWithHotelInfo;
+    } else {
+      // 如果没有有效的数据，清空数据列表
+      data.value = [];
+    }
   } catch (error) {
+    console.error("fetchData error:", error);
     message.error("请求失败，请重试");
   }
 };
 
 // 获取初始数据
-fetchData();
+fetchData("", formState.token);
 
 // 搜索功能
 const onSearch = () => {
-  fetchData(searchValue.value);
+  fetchData(searchValue.value, formState.token);
 };
 
 // 编辑功能
@@ -190,10 +280,13 @@ const resetForm = () => {
   visible.value = false;
   Object.assign(formState, {
     id: 0,
-    name: "",
-    location: "",
-    phone: "",
-    email: "",
+    hotel: 0,
+    hotel_name: "",
+    hotel_location: "",
+    room_type: "",
+    capacity: 0,
+    price: 0,
+    description: "",
     mode: "",
   });
   formRef.value.resetFields();
@@ -201,22 +294,23 @@ const resetForm = () => {
 
 // 确认按钮操作
 const onOk = () => {
+  console.log(formState);
   formRef.value
     .validateFields()
     .then(async (values) => {
       try {
         if (formState.mode === "add") {
           // console.log(toRaw(formState));
-          await addHotels(toRaw(formState)); // 调用添加酒店的函数
-          message.success("酒店添加成功");
+          await addRooms(toRaw(formState));
+          message.success("用户添加成功");
         } else if (formState.mode === "edit") {
-          await editHotels(toRaw(formState)); // 调用编辑酒店的函数
-          message.success("酒店信息更新成功");
+          await editRooms(toRaw(formState));
+          message.success("用户信息更新成功");
         }
-        fetchData();
+        fetchData("", formState.token);
       } catch (error) {
         message.error(
-          formState.mode === "add" ? "添加酒店失败" : "更新酒店信息失败"
+          formState.mode === "add" ? "添加用户失败" : "更新用户信息失败"
         );
       }
       resetForm();
@@ -234,9 +328,9 @@ const onCancel = () => {
 // 删除功能
 const handleDelete = async (record?: any) => {
   // console.log(`record.id: ${record.id}, formState.token: ${formState.token}`);
-  await deleteHotels(record.id, formState.token);
+  await deleteRooms(record.id, formState.token);
   message.success("删除成功");
-  fetchData();
+  fetchData("", formState.token);
 };
 
 // 添加功能

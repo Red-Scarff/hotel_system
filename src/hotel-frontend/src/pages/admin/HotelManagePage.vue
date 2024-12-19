@@ -1,5 +1,5 @@
 <template>
-  <div id="user-manage-page">
+  <div id="hotel-manage-page">
     <a-row class="container">
       <!-- 搜索框 -->
       <a-col flex="auto">

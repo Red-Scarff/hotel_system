@@ -79,6 +79,14 @@ export const deleteHotels = async (id: number, token: string) => {
   });
 };
 
+export const searchHotels_byid = async (id: number) => {
+  // console.log(id);
+  return await myAxios.request({
+    url: `/hotels/${id}/`,
+    method: "GET",
+  });
+};
+
 export const searchHotels = async (info: any = "") => {
   // 将 info 的默认值设置为空字符串
   if (info) {
@@ -122,10 +130,65 @@ export const addHotels = async (formState: any) => {
   });
 };
 
-export const searchRooms = async () => {
+export const deleteRooms = async (id: number, token: string) => {
+  // 发起删除请求
   return await myAxios.request({
-    url: "/rooms",
-    method: "GET",
+    url: `/rooms/${id}/`, // 使用模板字符串来插入 ID
+    method: "DELETE",
+    headers: {
+      Authorization: `Token ${token}`, // 添加 Authorization 请求头
+    },
+  });
+};
+
+export const searchRooms = async (info: any = "", token: string) => {
+  // 将 info 的默认值设置为空字符串
+  if (info) {
+    // 简化判断条件
+    // console.log(`/hotels/?search=${info}/`);
+    return await myAxios.request({
+      url: `/rooms/?search=${info}`,
+      method: "GET",
+      headers: {
+        Authorization: `Token ${token}`, // 添加Authorization头
+      },
+    });
+  } else {
+    return await myAxios.request({
+      url: "/rooms/",
+      method: "GET",
+      headers: {
+        Authorization: `Token ${token}`, // 添加Authorization头
+      },
+    });
+  }
+};
+
+// 编辑房间信息
+export const editRooms = async (formState: any) => {
+  const { id, mode, token, hotel_name, hotek_location, ...roomData } =
+    formState;
+  return await myAxios.request({
+    url: `/rooms/${id}/`,
+    method: "PUT",
+    headers: {
+      Authorization: `Token ${token}`, // 添加Authorization头
+    },
+    data: roomData,
+  });
+};
+
+// 添加房间信息
+export const addRooms = async (formState: any) => {
+  const { id, mode, token, hotel_name, hotek_location, ...roomData } =
+    formState;
+  return await myAxios.request({
+    url: "/rooms/",
+    method: "POST",
+    headers: {
+      Authorization: `Token ${token}`, // 添加Authorization头
+    },
+    data: roomData,
   });
 };
 

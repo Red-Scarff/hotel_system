@@ -26,8 +26,8 @@
         </div>
 
         <div class="card">
-          <h2>客户管理</h2>
-          <p>查看和管理所有客户信息。</p>
+          <h2>用户管理</h2>
+          <p>查看和管理所有用户信息。</p>
           <a class="btn" @click="goToRoute('/admin/userManage')">进入</a>
         </div>
       </section>
