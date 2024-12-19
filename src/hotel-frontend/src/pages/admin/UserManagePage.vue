@@ -176,9 +176,9 @@ const columns = [
 ];
 
 // 获取数据并更新表格
-const fetchData = async (info = "") => {
+const fetchData = async (info = "", token: string) => {
   try {
-    const response = await searchUsers(info);
+    const response = await searchUsers(info, token);
     // console.log(response);
     data.value = [...response.data]; // 强制替换，确保 Vue 能感知到变化
   } catch (error) {
@@ -187,11 +187,11 @@ const fetchData = async (info = "") => {
 };
 
 // 获取初始数据
-fetchData();
+fetchData("", formState.token);
 
 // 搜索功能
 const onSearch = () => {
-  fetchData(searchValue.value);
+  fetchData(searchValue.value, formState.token);
 };
 
 // 编辑功能
@@ -210,10 +210,12 @@ const resetForm = () => {
   visible.value = false;
   Object.assign(formState, {
     id: 0,
-    name: "",
-    location: "",
-    phone: "",
+    username: "",
+    first_name: "",
+    last_name: "",
     email: "",
+    phone: "",
+    password: "",
     mode: "",
   });
   formRef.value.resetFields();
@@ -233,7 +235,7 @@ const onOk = () => {
           await editUsers(toRaw(formState));
           message.success("用户信息更新成功");
         }
-        fetchData();
+        fetchData("", formState.token);
       } catch (error) {
         message.error(
           formState.mode === "add" ? "添加用户失败" : "更新用户信息失败"
@@ -256,7 +258,7 @@ const handleDelete = async (record?: any) => {
   // console.log(`record.id: ${record.id}, formState.token: ${formState.token}`);
   await deleteUsers(record.id, formState.token);
   message.success("删除成功");
-  fetchData();
+  fetchData("", formState.token);
 };
 
 // 添加功能

@@ -19,7 +19,7 @@ export const deleteUsers = async (id: number, token: string) => {
   });
 };
 
-export const searchUsers = async (info: any = "") => {
+export const searchUsers = async (info: any = "", token: string) => {
   // 将 info 的默认值设置为空字符串
   if (info) {
     // 简化判断条件
@@ -27,11 +27,17 @@ export const searchUsers = async (info: any = "") => {
     return await myAxios.request({
       url: `/users/?search=${info}`,
       method: "GET",
+      headers: {
+        Authorization: `Token ${token}`, // 添加Authorization头
+      },
     });
   } else {
     return await myAxios.request({
       url: "/users/",
       method: "GET",
+      headers: {
+        Authorization: `Token ${token}`, // 添加Authorization头
+      },
     });
   }
 };
