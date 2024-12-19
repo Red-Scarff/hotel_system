@@ -86,6 +86,13 @@ export const searchHotels_byid = async (id: number) => {
     method: "GET",
   });
 };
+export const searchRooms_byid = async (id: number) => {
+  // console.log(id);
+  return await myAxios.request({
+    url: `/rooms/${id}/`,
+    method: "GET",
+  });
+};
 
 export const searchHotels = async (info: any = "") => {
   // 将 info 的默认值设置为空字符串
@@ -166,7 +173,7 @@ export const searchRooms = async (info: any = "", token: string) => {
 
 // 编辑房间信息
 export const editRooms = async (formState: any) => {
-  const { id, mode, token, hotel_name, hotek_location, ...roomData } =
+  const { id, mode, token, hotel_name, hotel_location, ...roomData } =
     formState;
   return await myAxios.request({
     url: `/rooms/${id}/`,
@@ -180,7 +187,7 @@ export const editRooms = async (formState: any) => {
 
 // 添加房间信息
 export const addRooms = async (formState: any) => {
-  const { id, mode, token, hotel_name, hotek_location, ...roomData } =
+  const { id, mode, token, hotel_name, hotel_location, ...roomData } =
     formState;
   return await myAxios.request({
     url: "/rooms/",
@@ -192,21 +199,64 @@ export const addRooms = async (formState: any) => {
   });
 };
 
-export const searchBookings = async () => {
+export const deleteBookings = async (id: number, token: string) => {
+  // 发起删除请求
   return await myAxios.request({
-    url: "/bookings",
-    method: "GET",
+    url: `/bookings/${id}/`, // 使用模板字符串来插入 ID
+    method: "DELETE",
+    headers: {
+      Authorization: `Token ${token}`, // 添加 Authorization 请求头
+    },
   });
 };
 
-// 删除用户
-export const deleteUser = async (id: any) => {
+export const searchBookings = async (info: any = "", token: string) => {
+  // 将 info 的默认值设置为空字符串
+  if (info) {
+    // 简化判断条件
+    // console.log(`/hotels/?search=${info}/`);
+    return await myAxios.request({
+      url: `/bookings/?search=${info}`,
+      method: "GET",
+      headers: {
+        Authorization: `Token ${token}`, // 添加Authorization头
+      },
+    });
+  } else {
+    return await myAxios.request({
+      url: "/bookings/",
+      method: "GET",
+      headers: {
+        Authorization: `Token ${token}`, // 添加Authorization头
+      },
+    });
+  }
+};
+
+// 编辑房间信息
+export const editBookings = async (formState: any) => {
+  const { id, mode, token, hotel_name, hotel_location, ...bookingData } =
+    formState;
   return await myAxios.request({
-    url: "/api/user/delete",
-    method: "POST",
-    data: id,
+    url: `/bookings/${id}/`,
+    method: "PUT",
     headers: {
-      "Content-Type": "application/json",
+      Authorization: `Token ${token}`, // 添加Authorization头
     },
+    data: bookingData,
+  });
+};
+
+// 添加房间信息
+export const addBookings = async (formState: any) => {
+  const { id, mode, token, hotel_name, hotel_location, ...bookingData } =
+    formState;
+  return await myAxios.request({
+    url: "/bookings/",
+    method: "POST",
+    headers: {
+      Authorization: `Token ${token}`, // 添加Authorization头
+    },
+    data: bookingData,
   });
 };
