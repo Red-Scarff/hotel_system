@@ -50,6 +50,8 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]  # 允许任何人访问（注册）
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username']  # 支持搜索的字段  
 
     def get_permissions(self):
         """
