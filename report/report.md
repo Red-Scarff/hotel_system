@@ -37,12 +37,12 @@
 
 ### a. 后台数据库设计 (PostgreSQL)
 
-#### 关系模式总结
+**关系模式:**
 
-* **Hotels (HotelID, Name, Location, Phone, Email)**
-* **Rooms (RoomID, HotelID, RoomType, Capacity, Price, Description)**
-* **Customers (CustomerID, FirstName, LastName, Phone, Email, Address)**
-* **Bookings (BookingID, CustomerID, RoomID, CheckInDate, CheckOutDate, TotalPrice, Status)**
+* Hotels (HotelID, Name, Location, Phone, Email)
+* Rooms (RoomID, HotelID, RoomType, Capacity, Price, Description)
+* Customers (CustomerID, FirstName, LastName, Phone, Email, Address)
+* Bookings (BookingID, CustomerID, RoomID, CheckInDate, CheckOutDate, TotalPrice, Status)
 
 ---
 
@@ -158,10 +158,8 @@
 
 ## 6. 前端开发 (Vue)
 
-## 7. 项目整合
+## 7. 项目测试与优化
 
-## 8. 项目测试与优化
+## 8. 功能介绍
 
-## 9. 功能介绍
-
-## 10. 项目总结
+## 9. 项目总结
