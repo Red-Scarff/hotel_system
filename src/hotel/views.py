@@ -41,7 +41,7 @@ class BookingViewSet(viewsets.ModelViewSet):
     serializer_class = BookingSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['customer_name']  # 支持搜索的字段  
-    permission_classes = [permissions.IsAuthenticated()]
+    permission_classes = [permissions.IsAuthenticated]
 
 class UserViewSet(viewsets.ModelViewSet):
     """
