@@ -4,102 +4,289 @@
       <h1 class="title">请输入预订相关信息</h1>
       <div class="form-container">
         <a-form
-          class="login-form"
-          style="max-width: 480px; margin: 0 auto"
+          ref="formRef"
           :model="formState"
-          name="basic"
-          label-align="left"
-          autocomplete="off"
-          @finish="onFinish"
+          layout="vertical"
+          name="form_in_modal"
+          style="padding-top: 20px"
         >
-          <a-form-item
-            label="用户名"
-            name="username"
-            :rules="[{ required: true, message: '请输入用户名' }]"
-          >
-            <a-input
-              v-model:value="formState.username"
-              placeholder="请输入用户名"
-            />
-          </a-form-item>
-
-          <a-form-item
-            label="密码"
-            name="password"
-            :labelCol="{ style: { color: '#fff' } }"
-            :rules="[
-              { required: true, message: '请输入密码' },
-              { min: 6, message: '密码长度至少6位' },
-            ]"
-          >
-            <!-- <template #label>
-            <span style="font-size: 16px; color: #f8f2f2; margin-bottom: 10px"
-              >密码：</span
+          <div class="form-row">
+            <a-form-item
+              label="客户昵称"
+              :rules="[{ required: false, message: '请输入客户昵称!' }]"
             >
-          </template> -->
-            <a-input-password
-              v-model:value="formState.password"
-              placeholder="请输入密码"
-            />
+              <a-select v-model:value="formState.user">
+                <a-select-option
+                  v-for="user in userOptions"
+                  :key="user.value"
+                  :value="user.value"
+                >
+                  {{ user.label }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+            <a-form-item
+              label="房间"
+              :rules="[{ required: true, message: '请输入房间!' }]"
+            >
+              <a-select v-model:value="formState.room">
+                <a-select-option
+                  v-for="room in roomOptions"
+                  :key="room.value"
+                  :value="room.value"
+                >
+                  {{ room.label }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+          </div>
+
+          <a-form-item
+            label="客户真实姓名"
+            :rules="[{ required: true, message: '请输入客户真实姓名!' }]"
+          >
+            <a-input v-model:value="formState.customer_name" />
           </a-form-item>
 
-          <!-- <a-form-item name="remember" :wrapper-col="{ offset: 8, span: 16 }">
-        <a-checkbox v-model:checked="formState.remember"
-          >Remember me</a-checkbox
-        >
-      </a-form-item> -->
+          <div class="form-row">
+            <a-form-item
+              label="入住日期"
+              :rules="[{ required: true, message: '请输入入住日期!' }]"
+            >
+              <a-input
+                v-model:value="formState.check_in_date"
+                placeholder="(格式:YYYY-MM-DD)"
+              />
+            </a-form-item>
+            <a-form-item
+              label="退房日期"
+              :rules="[{ required: true, message: '请输入退房日期!' }]"
+            >
+              <a-input
+                v-model:value="formState.check_out_date"
+                placeholder="(格式:YYYY-MM-DD)"
+              />
+            </a-form-item>
+          </div>
 
-          <a-form-item style="margin-top: 50px">
-            <a-button type="primary" html-type="submit">登录</a-button>
+          <!-- <a-form-item
+            label="总价格"
+            :rules="[{ required: true, message: '请输入总价格!' }]"
+          >
+            <a-input v-model:value="formState.total_price" />
+          </a-form-item> -->
+          <a-form-item
+            label="状态"
+            :rules="[{ required: false, message: '请输入状态!' }]"
+          >
+            <a-input v-model:value="formState.status" />
           </a-form-item>
         </a-form>
+        <!-- 确认和取消按钮 -->
+        <div class="form-buttons">
+          <a-button type="primary" @click="onOk">确定</a-button>
+          <a-button @click="onCancel">取消</a-button>
+        </div>
       </div>
     </main>
   </div>
 </template>
+
 <script lang="ts" setup>
+// 你的脚本部分保持不变
+import {
+  addBookings,
+  searchRooms,
+  searchUsers,
+  searchHotels_byid,
+} from "@/api/user";
 import { userLogin } from "@/api/user";
 import { useLoginUserStore } from "@/store/useLoginUserStore";
 import { message } from "ant-design-vue";
-import { reactive } from "vue";
-import { useRouter } from "vue-router";
+import { reactive, ref, toRaw } from "vue";
+import { watch } from "vue";
+import type { FormInstance } from "ant-design-vue";
 
-interface FormState {
-  username: string;
-  password: string;
+const loginUserStore = useLoginUserStore();
+const visible = ref(true);
+interface Values {
+  id: number;
+  user: number;
+  room: number;
+  customer_name: string;
+  check_in_date: string;
+  check_out_date: string;
+  total_price: number;
+  status: string;
+  token: string;
 }
 
-const formState = reactive<FormState>({
-  username: "",
-  password: "",
+const formRef = ref<FormInstance>();
+const formState = reactive<Values>({
+  id: 0,
+  user: 0,
+  room: 0,
+  customer_name: "",
+  check_in_date: "",
+  check_out_date: "",
+  total_price: 0,
+  status: "",
+  token: loginUserStore.loginUser.token,
 });
 
-const router = useRouter();
-const loginUserStore = useLoginUserStore();
-const onFinish = async (values: any) => {
-  console.log(values);
-  const res = await userLogin(values);
-  console.log(res);
-  // 登录成功，保存全局状态
-  if (res) {
-    if (res.data.message === "Login successful.") {
-      await loginUserStore.fetchLoginUser(res);
-      message.success("登录成功");
-      router.push({ path: "/", replace: true });
-    } else {
-      message.error("登录失败");
+// 监控 loginUserStore.loginUser 的变化
+watch(
+  () => loginUserStore.loginUser,
+  (newLoginUser) => {
+    if (newLoginUser && newLoginUser.token) {
+      formState.token = newLoginUser.token;
     }
+  },
+  { immediate: true }
+);
+
+const resetForm = () => {
+  visible.value = false;
+  Object.assign(formState, {
+    id: 0,
+    user: 0,
+    room: 0,
+    customer_name: "",
+    check_in_date: "",
+    check_out_date: "",
+    total_price: 0,
+    status: "",
+  });
+  formRef.value.resetFields();
+};
+
+const onOk = async () => {
+  console.log(formState);
+
+  // 验证表单
+  try {
+    await formRef.value.validateFields();
+
+    // 计算入住天数
+    const checkInDate = new Date(formState.check_in_date);
+    const checkOutDate = new Date(formState.check_out_date);
+    const timeDifference = checkOutDate.getTime() - checkInDate.getTime();
+    const dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24)); // 转换为天数
+
+    if (dayDifference <= 0) {
+      message.error("退房日期必须晚于入住日期！");
+      return;
+    }
+
+    // 获取单天房价
+    const roomResponse = await searchRooms(formState.room, formState.token);
+    const room = roomResponse.data[0];
+    if (room) {
+      const dailyPrice = room.price; // 假设房间的价格字段为 price
+      formState.total_price = dailyPrice * dayDifference; // 计算总价格
+    } else {
+      message.error("房间信息获取失败");
+      return;
+    }
+
+    // 调用添加预订的 API
+    await addBookings(toRaw(formState));
+    message.success("用户添加成功");
+
+    resetForm();
+  } catch (error) {
+    console.error("添加用户失败:", error);
+    message.error("添加用户失败");
   }
 };
+
+const onCancel = () => {
+  resetForm();
+};
+
+const userOptions = ref<{ value: number; label: string }[]>([]);
+const loadingUserData = ref(false);
+const fetchUserOptions = async () => {
+  loadingUserData.value = true;
+  try {
+    const response = await searchUsers(
+      loginUserStore.loginUser.username,
+      formState.token
+    );
+
+    if (response && Array.isArray(response.data)) {
+      userOptions.value = response.data.map(
+        (user: { id: number; username: string }) => ({
+          value: user.id,
+          label: user.username,
+        })
+      );
+    } else {
+      userOptions.value = [];
+    }
+  } catch (error) {
+    console.error("获取用户信息失败:", error);
+    message.error("获取用户信息失败，请重试！");
+  } finally {
+    loadingUserData.value = false;
+  }
+};
+
+const roomOptions = ref<{ value: string; label: string }[]>([]);
+const loadingRoomData = ref(false);
+
+const fetchHotelOptions = async () => {
+  loadingRoomData.value = true;
+  try {
+    const response = await searchRooms("", formState.token);
+    if (response && Array.isArray(response.data)) {
+      const rooms = response.data;
+
+      const hotelPromises = rooms.map(async (room: any) => {
+        try {
+          const hotelResponse = await searchHotels_byid(room.hotel);
+          const hotelName =
+            hotelResponse && hotelResponse.data
+              ? hotelResponse.data.name
+              : "未找到酒店";
+
+          return {
+            value: room.id,
+            label: `${hotelName} - ${room.room_type} - ${room.price}`,
+          };
+        } catch (error) {
+          console.error(`获取房间 ${room.id} 的酒店信息失败:`, error);
+          return {
+            value: room.id,
+            label: `${room.name} - ${room.room_type} - ${room.price} (获取酒店信息失败)`,
+          };
+        }
+      });
+
+      roomOptions.value = await Promise.all(hotelPromises);
+    } else {
+      roomOptions.value = [];
+    }
+  } catch (error) {
+    console.error("获取房间信息失败:", error);
+    message.error("请先登录！");
+  } finally {
+    loadingRoomData.value = false;
+  }
+};
+
+fetchUserOptions();
+fetchHotelOptions();
 </script>
+
 <style scoped>
 #UserLoginPage {
   font-family: "Arial", sans-serif;
   text-align: center;
-  background: url("../../../jinx.jpg") no-repeat center center fixed; /* 背景图片 */
-  background-size: cover; /* 背景覆盖整个页面 */
-  position: relative; /* 需要为该元素设置相对定位 */
-  min-height: 90vh; /* 保证页面最小高度 */
+  background: url("../../../jinx.jpg") no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+  min-height: 90vh;
 }
 
 #UserLoginPage::before {
@@ -109,8 +296,8 @@ const onFinish = async (values: any) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.2); /* 半透明白色 */
-  z-index: -1; /* 确保这个伪元素在图片和内容下层 */
+  background: rgba(255, 255, 255, 0.2);
+  z-index: -1;
 }
 .ant-form-item-label > label {
   color: white !important;
@@ -140,15 +327,29 @@ const onFinish = async (values: any) => {
   margin: 0 auto;
 }
 .form-container {
-  background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
-  border-radius: 10px; /* 圆角 */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-  padding: 30px; /* 内边距 */
-  margin: 20px auto; /* 上下边距 */
-  transition: transform 0.3s ease; /* 平滑的动画效果 */
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin: 20px auto;
+  transition: transform 0.3s ease;
 }
 
 .form-container:hover {
-  transform: translateY(-5px); /* 鼠标悬停时轻微上升效果 */
+  transform: translateY(-5px);
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ant-form-item {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.ant-form-item:last-child {
+  margin-right: 0;
 }
 </style>
