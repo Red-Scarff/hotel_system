@@ -62,6 +62,7 @@ class Booking(models.Model):
         choices=[("confirmed", "已确认"), ("cancelled", "已取消")],
         default="confirmed",
         verbose_name="预订状态",
+        null=True
     )
 
     def __str__(self):
