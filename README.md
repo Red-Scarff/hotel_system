@@ -11,6 +11,7 @@ src目录下存储了全部代码文件，report目录下存储了详细的说�
 **a. Django 项目**
 
 安装 Django 和 Django REST Framework：
+
 ```bash
 pip install django djangorestframework
 ```
@@ -30,21 +31,17 @@ pip install django djangorestframework
 ## 运行可能遇到的问题
 
 - 前端在编写过程中使用了prettier进行代码规范化，可能不符合您的IDE设置，如果遇到格式之类的错误，请gpt一下搜索一键修复格式的命令
-
 - 前端项目支持npm或pnpm，如果运行过程发现了某些库未安装手动安装一下即可
   可能没安装的库：`pnpm install axios` ，`pnpm install pinia`，当然如果用 npm 也是同理
-
-- **运行前端** 请在hotel-frontend目录下`npm run serve` 或  `pnpm run serve`
-
+- **运行前端** 请在hotel-frontend目录下 `npm run serve` 或  `pnpm run serve`
 - 这是作者第一次写出如此庞大的项目，写完之后才发现居然写了两千五百行以上的前端，所以如果遇到某些小bug，还望海涵，欢迎提PR
-
-- **运行后端 **
+- **运行后端**
   请在my_hotel目录中新建local_setting.py，在这里将参数改为你的数据库设置
   在此之前，请先去数据库建立一个名为my_hotel的库（当然，如果你喜欢也可以叫别的名字，不过请记得改设置）
 
   ```
     # my_hotel/local_setting.py
-  
+
     Local_DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
