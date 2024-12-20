@@ -23,14 +23,12 @@ pip install django djangorestframework
 
 **b. Vue 项目**
 
-[https://blog.csdn.net/weixin_47036445/article/details/137519844]()
-
 - 安装 Node.js [https://nodejs.org/en]()
 - 安装 vue 脚手架 `npm install -g @vue/cli`
 
 ## 运行可能遇到的问题
 
-- 前端在编写过程中使用了prettier进行代码规范化，可能不符合您的IDE设置，如果遇到格式之类的错误，请gpt一下搜索一键修复格式的命令
+- 前端在编写过程中使用了prettier进行代码规范化，可能不符合您的IDE设置，如果遇到格式之类的错误，可尝试 `npm run lint --fix` 进行修复
 - 前端项目支持npm或pnpm，如果运行过程发现了某些库未安装手动安装一下即可
   可能没安装的库：`pnpm install axios` ，`pnpm install pinia`，当然如果用 npm 也是同理
 - **运行前端** 请在hotel-frontend目录下 `npm run serve` 或  `pnpm run serve`
@@ -60,6 +58,6 @@ pip install django djangorestframework
 
   `python manage.py migrate`
 
-  后端，启动：`python manage.py runserver`
+  后端启动：`python manage.py runserver`
 
 ## 鸣谢搭档！
