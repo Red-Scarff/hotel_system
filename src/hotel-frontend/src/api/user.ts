@@ -8,6 +8,15 @@ export const userLogin = async (params: any) => {
   });
 };
 
+// 用户注册
+export const userRegister = async (params: any) => {
+  return await myAxios.request({
+    url: "/users/",
+    method: "POST",
+    data: params,
+  });
+};
+
 export const deleteUsers = async (id: number, token: string) => {
   // 发起删除请求
   return await myAxios.request({
