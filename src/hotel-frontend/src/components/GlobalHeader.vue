@@ -70,6 +70,12 @@ const items = ref<MenuProps["items"]>([
     title: "用户登录",
   },
   {
+    key: "/user/register",
+    icon: () => h(UserOutlined),
+    label: "用户注册",
+    title: "用户注册",
+  },
+  {
     key: "/user/booking",
     icon: () => h(UserOutlined),
     label: "我要预订",

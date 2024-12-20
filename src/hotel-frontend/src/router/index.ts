@@ -6,6 +6,7 @@ import UserManagePage from "@/pages/admin/UserManagePage.vue";
 import HotelManagePage from "@/pages/admin/HotelManagePage.vue";
 import RoomManagePage from "@/pages/admin/RoomManagePage.vue";
 import BookingManagePage from "@/pages/admin/BookingManagePage.vue";
+import UserRegisterPage from "@/pages/user/UserRegisterPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,6 +18,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/user/login",
     name: "userLogin",
     component: UserLoginPage,
+  },
+  {
+    path: "/user/register",
+    name: "userRegister",
+    component: UserRegisterPage,
   },
   {
     path: "/user/booking",

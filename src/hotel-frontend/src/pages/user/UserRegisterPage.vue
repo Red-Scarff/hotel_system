@@ -1,7 +1,7 @@
 <template>
   <div id="UserLoginPage">
     <main class="main-content">
-      <h1 class="title">用户登录</h1>
+      <h1 class="title">用户注册</h1>
       <div class="form-container">
         <a-form
           class="login-form"
@@ -33,10 +33,10 @@
             ]"
           >
             <!-- <template #label>
-            <span style="font-size: 16px; color: #f8f2f2; margin-bottom: 10px"
-              >密码：</span
-            >
-          </template> -->
+              <span style="font-size: 16px; color: #f8f2f2; margin-bottom: 10px"
+                >密码：</span
+              >
+            </template> -->
             <a-input-password
               v-model:value="formState.password"
               placeholder="请输入密码"
@@ -44,25 +44,21 @@
           </a-form-item>
 
           <!-- <a-form-item name="remember" :wrapper-col="{ offset: 8, span: 16 }">
-        <a-checkbox v-model:checked="formState.remember"
-          >Remember me</a-checkbox
-        >
-      </a-form-item> -->
+          <a-checkbox v-model:checked="formState.remember"
+            >Remember me</a-checkbox
+          >
+        </a-form-item> -->
 
           <a-form-item style="margin-top: 50px">
-            <a-button type="primary" html-type="submit">登录</a-button>
+            <a-button type="primary" html-type="submit">注册</a-button>
           </a-form-item>
         </a-form>
-        <!-- 提示没有账号，跳转到注册页面 -->
-        <div class="register-prompt">
-          没有账号？<a @click="navigateToRegister">请先注册</a>
-        </div>
       </div>
     </main>
   </div>
 </template>
 <script lang="ts" setup>
-import { userLogin } from "@/api/user";
+import { userLogin, userRegister } from "@/api/user";
 import { useLoginUserStore } from "@/store/useLoginUserStore";
 import { message } from "ant-design-vue";
 import { reactive } from "vue";
@@ -82,22 +78,25 @@ const router = useRouter();
 const loginUserStore = useLoginUserStore();
 const onFinish = async (values: any) => {
   console.log(values);
-  const res = await userLogin(values);
+  const res = await userRegister(values);
   console.log(res);
-  // 登录成功，保存全局状态
-  if (res) {
-    if (res.data.message === "Login successful.") {
-      await loginUserStore.fetchLoginUser(res);
-      message.success("登录成功");
+  // 注册成功，保存全局状态
+  if (res && res.data.id) {
+    console.log("注册成功");
+    console.log(res.data.username, res.data.password);
+    const login_res = await userLogin({
+      username: values.username,
+      password: values.password,
+    });
+    console.log(login_res);
+    if (login_res.data.message === "Login successful.") {
+      await loginUserStore.fetchLoginUser(login_res);
+      message.success("注册成功");
       router.push({ path: "/", replace: true });
     } else {
-      message.error("登录失败，请先注册");
+      message.error("注册失败");
     }
   }
-};
-// 跳转到注册页面
-const navigateToRegister = () => {
-  router.push("/user/register");
 };
 </script>
 <style scoped>
@@ -158,16 +157,5 @@ const navigateToRegister = () => {
 
 .form-container:hover {
   transform: translateY(-5px); /* 鼠标悬停时轻微上升效果 */
-}
-/* 注册提示样式 */
-.register-prompt {
-  margin-top: 20px;
-  color: #000000; /* 黑色字体 */
-}
-
-.register-prompt a {
-  color: #1890ff;
-  cursor: pointer;
-  text-decoration: underline;
 }
 </style>

@@ -8,7 +8,7 @@
         <router-view />
       </a-layout-content>
       <a-layout-footer class="footer">
-        Designed by 王志杰 and 徐子鑫
+        Designed by RedScarff and Kotoha
       </a-layout-footer>
     </a-layout>
   </div>
