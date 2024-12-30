@@ -301,11 +301,21 @@ const onOk = () => {
       try {
         if (formState.mode === "add") {
           // console.log(toRaw(formState));
-          await addRooms(toRaw(formState));
-          message.success("房间添加成功");
+          if (loginUserStore.loginUser.userRole === "manager") {
+            await addRooms(toRaw(formState)); // 调用添加酒店的函数
+            message.success("房间添加成功");
+          } else {
+            message.error("只有管理员才能添加房间");
+            return;
+          }
         } else if (formState.mode === "edit") {
-          await editRooms(toRaw(formState));
-          message.success("房间信息更新成功");
+          if (loginUserStore.loginUser.userRole === "manager") {
+            await editRooms(toRaw(formState)); // 调用添加酒店的函数
+            message.success("房间信息更新成功");
+          } else {
+            message.error("只有管理员才能更新房间信息");
+            return;
+          }
         }
         fetchData("", formState.token);
       } catch (error) {
@@ -328,8 +338,13 @@ const onCancel = () => {
 // 删除功能
 const handleDelete = async (record?: any) => {
   // console.log(`record.id: ${record.id}, formState.token: ${formState.token}`);
-  await deleteRooms(record.id, formState.token);
-  message.success("删除成功");
+  if (loginUserStore.loginUser.userRole === "manager") {
+    await deleteRooms(record.id, formState.token);
+    message.success("删除成功");
+  } else {
+    message.error("只有管理员才能删除房间");
+    return;
+  }
   fetchData("", formState.token);
 };
 

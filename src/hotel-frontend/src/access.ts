@@ -14,7 +14,8 @@ router.beforeEach((to, from, next) => {
       next("/user/login?redirect=" + to_url);
       return;
     } else if (
-      to_url.startsWith("/admin/") &&
+      (to_url.startsWith("/admin/booking") ||
+        to_url.startsWith("/admin/user")) &&
       loginUser.userRole !== "manager"
     ) {
       message.error("抱歉，您无权访问此页面");

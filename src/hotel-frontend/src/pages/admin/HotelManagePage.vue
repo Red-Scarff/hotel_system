@@ -207,11 +207,21 @@ const onOk = () => {
       try {
         if (formState.mode === "add") {
           // console.log(toRaw(formState));
-          await addHotels(toRaw(formState)); // 调用添加酒店的函数
-          message.success("酒店添加成功");
+          if (loginUserStore.loginUser.userRole === "manager") {
+            await addHotels(toRaw(formState)); // 调用添加酒店的函数
+            message.success("酒店添加成功");
+          } else {
+            message.error("只有管理员才能添加酒店");
+            return;
+          }
         } else if (formState.mode === "edit") {
-          await editHotels(toRaw(formState)); // 调用编辑酒店的函数
-          message.success("酒店信息更新成功");
+          if (loginUserStore.loginUser.userRole === "manager") {
+            await editHotels(toRaw(formState)); // 调用添加酒店的函数
+            message.success("酒店信息更新成功");
+          } else {
+            message.error("只有管理员才能更新酒店");
+            return;
+          }
         }
         fetchData();
       } catch (error) {
@@ -234,8 +244,13 @@ const onCancel = () => {
 // 删除功能
 const handleDelete = async (record?: any) => {
   // console.log(`record.id: ${record.id}, formState.token: ${formState.token}`);
-  await deleteHotels(record.id, formState.token);
-  message.success("删除成功");
+  if (loginUserStore.loginUser.userRole === "manager") {
+    await deleteHotels(record.id, formState.token);
+    message.success("删除成功");
+  } else {
+    message.error("只有管理员才能删除酒店");
+    return;
+  }
   fetchData();
 };
 
