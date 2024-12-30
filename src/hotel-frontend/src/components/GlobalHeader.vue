@@ -84,8 +84,8 @@ const items = ref<MenuProps["items"]>([
   {
     key: "/admin/hotelManage",
     icon: () => h(CrownOutlined),
-    label: "酒店信息管理",
-    title: "酒店信息管理",
+    label: "酒店管理",
+    title: "酒店管理",
   },
   {
     key: "/admin/roomManage",

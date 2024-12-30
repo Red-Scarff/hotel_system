@@ -5,6 +5,8 @@
 | 徐子鑫 | 22336267 | 数据库框架设计、后端开发 |
 | 王志杰 | 22331095 | 前端框架设计、前端开发   |
 
+完整项目代码可通过 https://github.com/Red-Scarff/hotel_system 查阅![image-20241230181327430](image/image-20241230181327430.png)
+
 ## 1. 项目要求
 
 以**Postgresql**、 **SQL Server**或**My SQL**等作为后台数据库，以**React**、 **Vue**、 **Angular**等或其它开发工具作为前台开发工具，完成一个小型数据库应用系统的设计开发。完成系统的分析、设计和开发。
@@ -27,7 +29,11 @@
 
 ### a. 系统结构图
 
+![image-20241231002549218](image/image-20241231002549218.png)
+
 ### b. 系统功能模块图
+
+![系统功能模块图](image/系统功能模块图.png)
 
 ### c. E-R图
 
@@ -112,6 +118,94 @@ Django 是一个用 Python 编写的高层次 Web 框架，主要特点包括：
 * **错误处理** ：设计标准的错误响应机制，对常见错误（如404、500）提供清晰的反馈；确保敏感信息不暴露给前端。
 
 ### c. 前端开发 (Vue)
+
+在酒店管理系统的前端开发中，我们采用了 **Vue.js** 作为核心框架，并结合 **Ant Design Vue** 组件库，构建了一个功能丰富、用户体验友好的单页应用（SPA）。以下是前端开发的总体设计：
+
+1. **技术栈与架构**
+
+   - **核心框架**：Vue.js
+     - Vue.js 是一个渐进式 JavaScript 框架，通过响应式数据绑定和组件化开发，简化了前端开发流程。
+     - 使用 Vue 3 的 Composition API，提升了代码的可维护性和复用性。
+   - **UI 组件库**：Ant Design Vue
+     - Ant Design Vue 提供了丰富的 UI 组件（如表格、表单、按钮、弹窗等），帮助我们快速构建美观且功能强大的用户界面。
+     - 通过 Ant Design 的布局组件（如 `a-layout`、`a-row`、`a-col`），实现了页面的响应式布局。
+   - **状态管理**：Pinia
+     - Pinia 是 Vue 3 推荐的状态管理库，用于管理全局状态（如用户登录信息、权限等）。
+     - 通过 Pinia，我们实现了用户登录状态的全局共享和同步。
+   - **路由管理**：Vue Router
+     - 使用 Vue Router 实现页面路由跳转，支持动态路由和路由守卫，确保用户在不同页面之间的无缝切换。
+     - 通过路由守卫，限制未登录用户访问敏感页面（如管理页面），提升系统安全性。
+
+   - **HTTP 请求库**：Axios
+     - Axios 是一个基于 Promise 的 HTTP 客户端，用于与后端 RESTful API 进行数据交互。
+     - 通过封装 Axios 请求，实现了统一的 API 调用和错误处理机制。
+
+2. **页面设计与功能**
+
+   - **用户登录页面 (`UserLoginPage.vue`)**：
+     - 提供用户名和密码输入框，支持表单验证。
+     - 登录成功后，用户信息存储在 Pinia 中，并重定向到首页。
+   - **用户注册页面 (`UserRegisterPage.vue`)**：
+     - 提供用户名和密码输入框，支持表单验证。
+     - 注册成功后，自动登录用户并重定向到首页。
+   - **酒店管理页面 (`HotelManagePage.vue`)**：
+     - 展示酒店列表，支持添加、编辑和删除酒店信息。
+     - 通过 `a-table` 组件展示数据，通过 `a-modal` 组件实现表单弹窗。
+   - **房间管理页面 (`RoomManagePage.vue`)**：
+     - 展示房间列表，支持添加、编辑和删除房间信息。
+     - 通过 `a-select` 组件实现酒店选择功能，提升用户体验。
+   - **预订管理页面 (`BookingManagePage.vue`)**：
+     - 展示预订列表，支持添加、编辑和删除预订信息。
+     - 通过表单验证确保预订信息的完整性。
+   - **用户预订页面 (`UserBookingPage.vue`)**：
+     - 允许用户选择房间、填写入住和退房日期，并自动计算总价格。
+     - 通过表单验证确保用户输入的日期和房间信息有效。
+
+   - **用户管理页面 (`UserManagePage.vue`)**：
+     - 展示用户列表，支持添加、编辑和删除用户信息。
+     - 通过表单验证确保用户名和密码等必填项已填写。
+
+3. **用户体验优化**
+
+   - **自动搜索与选择**：
+     - 在酒店和房间选择功能中，通过 `a-select` 组件实现自动搜索和选择弹窗，提升用户操作效率。
+     - 用户无需手动输入酒店名称，只需从下拉框中选择即可。
+   - **表单自动填充**：
+     - 在编辑模式下，系统会自动将当前条目的已有信息填充到表单中，减少用户输入操作。
+     - 通过 `Object.assign` 方法实现表单字段的自动填充。
+   - **表单验证**：
+     - 使用 Ant Design 的 `a-form` 组件实现表单验证，确保用户输入的数据符合要求。
+     - 通过 `rules` 属性定义验证规则，如必填项、最小长度等。
+
+   - **交互反馈**：
+     - 使用 Ant Design 的 `message` 和 `notification` 组件，为用户提供操作成功或失败的提示信息。
+     - 在数据加载或提交时，使用 `a-spin` 组件显示加载状态，避免用户误操作。
+
+4. **性能优化**
+
+   - **代码分割与懒加载**：
+     - 通过 Vue Router 的懒加载功能，将页面组件按需加载，减少初始加载时间。
+     - 使用 Vue 3 的异步组件，进一步提升页面加载速度。
+   - **数据缓存**：
+     - 使用 Pinia 或 localStorage 缓存常用数据（如用户信息、酒店列表），减少不必要的 API 调用。
+     - 通过缓存机制，提升系统的响应速度和用户体验。
+
+   - **图片优化**：
+     - 对页面中的图片进行压缩和懒加载，减少页面加载时间。
+     - 使用 `img` 标签的 `loading="lazy"` 属性，实现图片的懒加载。
+
+5. **安全性考虑**
+
+   - **路由守卫**：
+     - 通过 Vue Router 的路由守卫功能，限制未登录用户访问敏感页面（如管理页面）。
+     - 在路由跳转前，检查用户登录状态和权限，确保系统安全性。
+   - **数据保护**：
+     - 在发送敏感数据（如用户密码）时，使用 HTTPS 加密传输，避免数据泄露。
+     - 通过哈希算法（如 bcrypt）存储用户密码，避免明文存储。
+
+   - **错误处理**：
+     - 在 API 调用失败时，提供友好的错误提示信息，避免用户困惑。
+     - 通过 Axios 的拦截器，统一处理 HTTP 错误响应。
 
 ## 4. 后台数据库设计 (PostgreSQL)
 
@@ -830,6 +924,854 @@ search
 
 ## 6. 前端开发 (Vue)
 
+前端部分用Vue.js实现用户界面，使用了vue-cli脚手架，构建过程使用了 ant design vue 组件库，使用pinia库管理全局状态，发送请求给 Django API 并展示响应数据。
+
+由于前端部分代码实在太长，这里只做大致的介绍并给出关键的部分代码，所有的代码都位于hotel_system/src/hotel-frontend/src下
+
+### a. 基本的页面设计
+
+这一部分的代码参见pages/HomePage, components/GlobalHeader和layouts/BasicLayout
+
+1. **页面布局与结构**
+
+   - **整体布局**：系统采用了经典的上下布局结构，顶部为导航栏（`GlobalHeader`），中间为内容区域（`router-view`），底部为页脚（`Footer`）。这种布局简洁清晰，便于用户快速定位和操作。
+
+   - **导航栏**：导航栏位于页面顶部，包含系统标题、菜单项和用户登录状态。菜单项通过`a-menu`组件实现，支持水平排列，用户可以通过点击菜单项跳转到不同页面。
+
+   - **内容区域**：内容区域根据路由动态加载不同的页面组件，如主页、用户登录、酒店管理等页面。
+
+   - **页脚**：页脚固定在页面底部，显示系统设计者信息，背景采用渐变色，提升视觉效果。
+
+2. **页面功能模块**
+
+   - **主页（`HomePage`）**：主页展示了系统的核心功能入口，通过卡片形式呈现“酒店信息管理”、“房间管理”、“预订管理”和“用户管理”等功能模块。每个卡片包含功能描述和进入按钮，用户点击按钮即可跳转到相应页面。
+
+   - **导航功能**：通过`GlobalHeader`中的菜单项，用户可以快速访问系统的各个功能模块，如用户登录、用户注册、酒店管理、房间管理等。
+
+   - **用户登录状态**：导航栏右侧显示用户登录状态，若用户已登录，则显示用户名；若未登录，则显示“登录”按钮，点击按钮跳转到登录页面。
+
+3. **视觉设计**
+
+   - **配色方案**：系统采用了柔和的渐变色作为背景，如顶部导航栏的粉紫色渐变和页脚的蓝白色渐变，提升了页面的现代感和美观度。
+
+   - **卡片设计**：主页的功能入口采用卡片式设计，卡片背景为白色，搭配阴影和悬停效果，增强了交互感和视觉层次。
+
+   - **字体与图标**：系统使用了清晰的字体和Ant Design的图标库，确保页面内容易于阅读和理解。
+
+4. **交互设计**
+
+   - **路由跳转**：通过`vue-router`实现页面之间的无缝跳转，用户点击菜单项或功能入口按钮时，页面会平滑过渡到目标页面。
+
+   - **动态菜单选中状态**：导航栏菜单项会根据当前路由自动高亮显示，帮助用户快速识别所在页面。
+
+   - **按钮交互**：按钮设计了悬停和点击效果，如主页卡片的“进入”按钮在悬停时会放大，点击时会有缩放效果，提升了用户的交互体验。
+
+5. **响应式设计**
+
+   - **布局适配**：系统采用了`a-row`和`a-col`等布局组件，确保页面在不同屏幕尺寸下都能保持良好的显示效果。
+
+   - **卡片布局**：主页的功能卡片采用了`flex`布局，并支持换行显示，确保在移动设备上也能正常排列和展示。
+
+6. **效果**
+
+   ![image-20241230181310990](image/image-20241230181310990.png)
+
+### b. 全局状态管理
+
+这部分代码参见store/useLoginUserStore
+
+在系统中，全局状态管理通过 **Pinia** 实现，用于管理用户的登录状态及相关信息。通过全局状态管理，可以在接下来的设计中很好的区分用户身份，并用这种方式给管理员特权。
+
+Pinia 是 Vue 3 官方推荐的状态管理库，具有轻量、易用和类型安全的特点。以下是全局状态管理的具体设计：
+
+1. **状态定义**
+
+- **`loginUser` 状态**：
+  使用 `ref` 定义了一个 `loginUser` 对象，用于存储当前登录用户的信息，包括：
+
+  - `username`：用户名。
+  - `token`：用户的身份验证令牌。
+  - `userRole`：用户的角色（如普通用户、管理员等）。
+
+  ```
+  const loginUser = ref<any>({
+    username: "",
+    token: "",
+    userRole: "",
+  });
+  ```
+
+2. **状态操作**
+
+- **`fetchLoginUser` 方法**：
+  用于从远程获取登录用户信息并更新 `loginUser` 状态。该方法接收一个响应对象 `res`，从中提取用户信息并赋值给 `loginUser`。
+
+  ```
+  async function fetchLoginUser(res: any) {
+    loginUser.value.username = res.data.user.username;
+    loginUser.value.token = res.data.token;
+    loginUser.value.userRole = res.data.role;
+  }
+  ```
+
+- **`setLoginUser` 方法**：（不过这个没用上）
+  用于直接设置 `loginUser` 状态。该方法接收一个用户对象 `user`，并将其赋值给 `loginUser`。
+
+  ```
+  function setLoginUser(user: any) {
+    loginUser.value = user;
+  }
+  ```
+
+### c. 路由控制
+
+这部分代码在router/index和access中给出
+
+路由控制主要包括路由配置和全局路由守卫两部分，确保用户能够根据其角色和登录状态访问相应的页面。
+
+#### 1. **路由配置**
+
+- **路由定义**：
+  在 `index.ts` 中，使用 `createRouter` 创建路由实例，并通过 `routes` 数组定义系统的所有路由。每个路由包含 `path`（路径）、`name`（路由名称）和 `component`（对应的组件）。
+
+  ```
+  const routes: Array<RouteRecordRaw> = [
+    {
+      path: "/",
+      name: "home",
+      component: HomePage,
+    },
+    {
+      path: "/user/login",
+      name: "userLogin",
+      component: UserLoginPage,
+    },
+    {
+      path: "/user/register",
+      name: "userRegister",
+      component: UserRegisterPage,
+    },
+    {
+      path: "/user/booking",
+      name: "userBooking",
+      component: UserBookingPage,
+    },
+    {
+      path: "/admin/userManage",
+      name: "adminUserManage",
+      component: UserManagePage,
+    },
+    {
+      path: "/admin/hotelManage",
+      name: "adminHotelManage",
+      component: HotelManagePage,
+    },
+    {
+      path: "/admin/RoomManage",
+      name: "adminRoomManage",
+      component: RoomManagePage,
+    },
+    {
+      path: "/admin/bookingManage",
+      name: "adminBookingManage",
+      component: BookingManagePage,
+    },
+  ];
+  ```
+
+- **路由模式**：
+  使用 `createWebHistory` 创建基于 HTML5 History API 的路由模式，支持无哈希的 URL，提升用户体验。
+
+  ```
+  const router = createRouter({
+    history: createWebHistory(process.env.BASE_URL),
+    routes,
+  });
+  ```
+
+#### 2. **全局路由守卫**
+
+- **路由守卫的作用**：
+  在 `access.ts` 中，通过 `router.beforeEach` 实现全局路由守卫，用于在用户访问页面之前进行权限验证。
+
+  ```
+  router.beforeEach((to, from, next) => {
+    const loginUserStore = useLoginUserStore();
+    const loginUser = loginUserStore.loginUser;
+    const to_url = to.path;
+  });
+  ```
+
+- **权限验证逻辑**：
+
+  - **管理员页面和用户预订页面**：
+    如果用户尝试访问以 `/admin/` 或 `/user/booking` 开头的页面，系统会检查用户是否已登录。如果未登录，则跳转到登录页面，并附带重定向 URL。这是为了保证只有在登陆情况下用户才能预订或查看相关信息。
+
+    ```
+    if (to_url.startsWith("/admin/") || to_url.startsWith("/user/booking")) {
+      if (!loginUser || loginUser.userRole === "") {
+        message.error("请先登录");
+        next("/user/login?redirect=" + to_url);
+        return;
+      }
+    }
+    ```
+
+  - **管理员专属页面**：
+    如果用户尝试访问 `/admin/bookingManage` 或 `/admin/userManage` 页面，系统会进一步检查用户角色是否为 `manager`。如果不是，则提示无权访问。
+
+    ```
+    if (
+      (to_url.startsWith("/admin/bookingManage") ||
+        to_url.startsWith("/admin/userManage")) &&
+      loginUser.userRole !== "manager"
+    ) {
+      message.error("抱歉，您无权访问此页面");
+      return;
+    }
+    ```
+
+  - **其他页面**：
+    对于无需权限验证的页面（如主页、登录页、注册页等），系统直接放行。
+
+    ```
+    else {
+      next();
+    }
+    ```
+
+### d. 调用后端api
+
+这部分代码主要在api/user中给出
+
+在系统中，后端 API 的调用通过封装好的 `myAxios` 实例进行，所有与用户、酒店、房间和预订相关的操作都通过统一的接口与后端进行数据交互，确保每次请求都携带正确的身份验证信息（如 token）。
+
+1. **用户管理**
+
+   - **登录与注册**：
+     提供了 `userLogin` 和 `userRegister` 方法，分别用于用户登录和注册。登录成功后，后端会返回用户信息和 token，用于后续的身份验证。
+
+   - **用户增删改查**：
+     通过 `searchUsers`、`addUsers`、`editUsers` 和 `deleteUsers` 方法，实现了用户的查询、添加、编辑和删除功能，确保管理员能够有效管理用户信息。
+
+2. **酒店管理**
+   - **酒店增删改查**：
+     提供了 `searchHotels`、`addHotels`、`editHotels` 和 `deleteHotels` 方法，支持管理员对酒店信息的查询、添加、编辑和删除操作。
+
+3. **房间管理**
+   - **房间增删改查**：
+     通过 `searchRooms`、`addRooms`、`editRooms` 和 `deleteRooms` 方法，实现了房间信息的查询、添加、编辑和删除功能，确保房间信息与酒店信息保持一致。
+
+4. **预订管理**
+   - **预订增删改查**：
+     提供了 `searchBookings`、`addBookings`、`editBookings` 和 `deleteBookings` 方法，支持用户和管理员对预订信息的查询、添加、编辑和删除操作。
+   
+
+### e. 页面实现的细节
+
+#### 1. **用户登录页面 (`UserLoginPage.vue`)**
+
+用户登录页面允许用户输入用户名和密码进行登录。登录成功后，用户将被重定向到首页。
+
+- **表单结构**：使用了 `a-form` 组件来构建登录表单，包含用户名和密码输入框。表单验证规则确保用户名和密码不能为空，且密码长度至少为6位。
+
+  ```
+  <a-form-item
+    label="用户名"
+    name="username"
+    :rules="[{ required: true, message: '请输入用户名' }]"
+  >
+    <a-input v-model:value="formState.username" placeholder="请输入用户名" />
+  </a-form-item>
+  <a-form-item
+    label="密码"
+    name="password"
+    :rules="[{ required: true, message: '请输入密码' }, { min: 6, message: '密码长度至少6位' }]"
+  >
+    <a-input-password v-model:value="formState.password" placeholder="请输入密码" />
+  </a-form-item>
+  ```
+
+- **登录逻辑**：在 `onFinish` 方法中，调用 `userLogin` API 进行登录验证。登录成功后，使用 `useLoginUserStore` 存储用户信息，并重定向到首页。
+
+  ```
+  const onFinish = async (values: any) => {
+    const res = await userLogin(values);
+    if (res && res.data.message === "Login successful.") {
+      await loginUserStore.fetchLoginUser(res);
+      message.success("登录成功");
+      router.push({ path: "/", replace: true });
+    } else {
+      message.error("登录失败，请先注册");
+    }
+  };
+  ```
+
+  ![image-20241230210450394](image/image-20241230210450394.png)
+
+#### 2. **用户注册页面 (`UserRegisterPage.vue`)**
+
+用户注册页面允许新用户注册账号。注册成功后，用户将自动登录并重定向到首页。
+
+- **表单结构**：与登录页面类似，使用了 `a-form` 组件来构建注册表单，包含用户名和密码输入框。
+
+  ```
+  <a-form-item
+    label="用户名"
+    name="username"
+    :rules="[{ required: true, message: '请输入用户名' }]"
+  >
+    <a-input v-model:value="formState.username" placeholder="请输入用户名" />
+  </a-form-item>
+  <a-form-item
+    label="密码"
+    name="password"
+    :rules="[{ required: true, message: '请输入密码' }, { min: 6, message: '密码长度至少6位' }]"
+  >
+    <a-input-password v-model:value="formState.password" placeholder="请输入密码" />
+  </a-form-item>
+  ```
+
+- **注册逻辑**：在 `onFinish` 方法中，调用 `userRegister` API 进行用户注册。注册成功后，自动调用 `userLogin` API 进行登录，并存储用户信息。
+
+  ```
+  const onFinish = async (values: any) => {
+    const res = await userRegister(values);
+    if (res && res.data.id) {
+      const login_res = await userLogin({
+        username: values.username,
+        password: values.password,
+      });
+      if (login_res.data.message === "Login successful.") {
+        await loginUserStore.fetchLoginUser(login_res);
+        message.success("注册成功");
+        router.push({ path: "/", replace: true });
+      } else {
+        message.error("注册失败");
+      }
+    }
+  };
+  ```
+
+  ![image-20241230210504013](image/image-20241230210504013.png)
+
+#### 3. **酒店管理页面 (`HotelManagePage.vue`)**
+
+酒店管理页面允许管理员查看、添加、编辑和删除酒店信息。
+
+- **表格展示**：使用 `a-table` 组件展示酒店列表，包含酒店名称、地址、电话和邮箱等信息。
+
+  ```
+  <a-table :columns="columns" :data-source="data" class="table">
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'action'">
+        <a-dropdown>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item key="1" @click="() => handleDelete(record)">删除</a-menu-item>
+              <a-menu-item key="2" @click="() => handleEdit(record)">修改</a-menu-item>
+            </a-menu>
+          </template>
+          <a-button>选择 <DownOutlined /></a-button>
+        </a-dropdown>
+      </template>
+    </template>
+  </a-table>
+  ```
+
+- **添加/编辑酒店**：通过 `a-modal` 组件弹出模态框，允许管理员添加或编辑酒店信息。表单验证确保所有必填项都已填写。
+
+  ```
+  <a-modal v-model:open="visible" title="新的条目内容" @ok="onOk" @cancel="onCancel">
+    <a-form ref="formRef" :model="formState" layout="vertical">
+      <a-form-item label="酒店名" :rules="[{ required: true, message: '请输入酒店名!' }]">
+        <a-input v-model:value="formState.name" />
+      </a-form-item>
+      <a-form-item label="地址" :rules="[{ required: true, message: '请输入酒店地址!' }]">
+        <a-input v-model:value="formState.location" />
+      </a-form-item>
+      <a-form-item label="电话号" :rules="[{ required: true, message: '请输入酒店电话号!' }]">
+        <a-input v-model:value="formState.phone" />
+      </a-form-item>
+      <a-form-item label="email" :rules="[{ required: true, message: '请输入酒店email!' }]">
+        <a-input v-model:value="formState.email" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
+  ```
+
+  ![image-20241230210557937](image/image-20241230210557937.png)
+
+#### 4. **房间管理页面 (`RoomManagePage.vue`)**
+
+房间管理页面允许管理员查看、添加、编辑和删除房间信息。基本是和酒店管理页面的设计是相同的
+
+- **表格展示**：使用 `a-table` 组件展示房间列表，包含房间类型、容纳人数、价格等信息。
+
+  ```
+  <a-table :columns="columns" :data-source="data" class="table">
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'action'">
+        <a-dropdown>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item key="1" @click="() => handleDelete(record)">删除</a-menu-item>
+              <a-menu-item key="2" @click="() => handleEdit(record)">修改</a-menu-item>
+            </a-menu>
+          </template>
+          <a-button>选择 <DownOutlined /></a-button>
+        </a-dropdown>
+      </template>
+    </template>
+  </a-table>
+  ```
+
+- **添加/编辑房间**：通过 `a-modal` 组件弹出模态框，允许管理员添加或编辑房间信息。表单验证确保所有必填项都已填写。
+
+  ```
+  <a-modal v-model:open="visible" title="新的条目内容" @ok="onOk" @cancel="onCancel">
+    <a-form ref="formRef" :model="formState" layout="vertical">
+      <a-form-item label="所属酒店" :rules="[{ required: true, message: '请输入所属酒店!' }]">
+        <a-select v-model:value="formState.hotel" placeholder="选择酒店">
+          <a-select-option v-for="hotel in hotelOptions" :key="hotel.value" :value="hotel.value">
+            {{ hotel.label }}
+          </a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="房间类型" :rules="[{ required: true, message: '请输入房间类型!' }]">
+        <a-input v-model:value="formState.room_type" />
+      </a-form-item>
+      <a-form-item label="容纳人数" :rules="[{ required: true, message: '请输入容纳人数!' }]">
+        <a-input v-model:value="formState.capacity" />
+      </a-form-item>
+      <a-form-item label="每晚价格" :rules="[{ required: true, message: '请输入每晚价格!' }]">
+        <a-input v-model:value="formState.price" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
+  ```
+
+  ![image-20241230210614972](image/image-20241230210614972.png)
+
+#### 5. **预订管理页面 (`BookingManagePage.vue`)**
+
+预订管理页面允许管理员查看、添加、编辑和删除预订信息。
+
+- **表格展示**：使用 `a-table` 组件展示预订列表，包含预订用户、房间、入住日期、退房日期等信息。
+
+  ```
+  <a-table :columns="columns" :data-source="data" class="table">
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'action'">
+        <a-dropdown>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item key="1" @click="() => handleDelete(record)">删除</a-menu-item>
+              <a-menu-item key="2" @click="() => handleEdit(record)">修改</a-menu-item>
+            </a-menu>
+          </template>
+          <a-button>选择 <DownOutlined /></a-button>
+        </a-dropdown>
+      </template>
+    </template>
+  </a-table>
+  ```
+
+- **添加/编辑预订**：通过 `a-modal` 组件弹出模态框，允许管理员添加或编辑预订信息。表单验证确保所有必填项都已填写。
+
+  ```
+  <a-modal v-model:open="visible" title="新的条目内容" @ok="onOk" @cancel="onCancel">
+    <a-form ref="formRef" :model="formState" layout="vertical">
+      <a-form-item label="客户昵称" :rules="[{ required: false, message: '请输入客户昵称!' }]">
+        <a-select v-model:value="formState.user">
+          <a-select-option v-for="user in userOptions" :key="user.value" :value="user.value">
+            {{ user.label }}
+          </a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="房间" :rules="[{ required: true, message: '请输入房间!' }]">
+        <a-select v-model:value="formState.room">
+          <a-select-option v-for="room in roomOptions" :key="room.value" :value="room.value">
+            {{ room.label }}
+          </a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="客户真实姓名" :rules="[{ required: true, message: '请输入客户真实姓名!' }]">
+        <a-input v-model:value="formState.customer_name" />
+      </a-form-item>
+      <a-form-item label="入住日期" :rules="[{ required: true, message: '请输入入住日期!' }]">
+        <a-input v-model:value="formState.check_in_date" placeholder="请输入入住日期(格式:YYYY-MM-DD)" />
+      </a-form-item>
+      <a-form-item label="退房日期" :rules="[{ required: true, message: '请输入退房日期!' }]">
+        <a-input v-model:value="formState.check_out_date" placeholder="请输入入住日期(格式:YYYY-MM-DD)" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
+  ```
+
+  ![image-20241230210629977](image/image-20241230210629977.png)
+
+#### 6. **用户预订页面 (`UserBookingPage.vue`)**
+
+用户预订页面允许用户进行房间预订。用户可以选择房间、填写入住和退房日期，并自动计算总价格。
+
+- **表单结构**：使用 `a-form` 组件构建预订表单，包含房间选择、入住日期、退房日期等输入项。
+
+  ```
+  <a-form ref="formRef" :model="formState" layout="vertical">
+    <a-form-item label="房间" :rules="[{ required: true, message: '请输入房间!' }]">
+      <a-select v-model:value="formState.room">
+        <a-select-option v-for="room in roomOptions" :key="room.value" :value="room.value">
+          {{ room.label }}
+        </a-select-option>
+      </a-select>
+    </a-form-item>
+    <a-form-item label="入住日期" :rules="[{ required: true, message: '请输入入住日期!' }]">
+      <a-input v-model:value="formState.check_in_date" placeholder="(格式:YYYY-MM-DD)" />
+    </a-form-item>
+    <a-form-item label="退房日期" :rules="[{ required: true, message: '请输入退房日期!' }]">
+      <a-input v-model:value="formState.check_out_date" placeholder="(格式:YYYY-MM-DD)" />
+    </a-form-item>
+  </a-form>
+  ```
+
+- **预订逻辑**：在 `onOk` 方法中，计算入住天数并根据房间价格计算总价格，然后调用 `addBookings` API 进行预订。
+
+  ```
+  const onOk = async () => {
+    try {
+      await formRef.value.validateFields();
+      const checkInDate = new Date(formState.check_in_date);
+      const checkOutDate = new Date(formState.check_out_date);
+      const timeDifference = checkOutDate.getTime() - checkInDate.getTime();
+      const dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+      if (dayDifference <= 0) {
+        message.error("退房日期必须晚于入住日期！");
+        return;
+      }
+      const roomResponse = await searchRooms(formState.room, formState.token);
+      const room = roomResponse.data[0];
+      if (room) {
+        const dailyPrice = room.price;
+        formState.total_price = dailyPrice * dayDifference;
+      } else {
+        message.error("房间信息获取失败");
+        return;
+      }
+      await addBookings(toRaw(formState));
+      message.success("预订添加成功");
+      resetForm();
+    } catch (error) {
+      console.error("用户预订失败:", error);
+      message.error("用户预订失败");
+    }
+  };
+  ```
+
+  ![image-20241230210710310](image/image-20241230210710310.png)
+
+#### 7. **用户管理页面 (`UserManagePage.vue`)**
+
+用户管理页面允许管理员查看、添加、编辑和删除用户信息。
+
+- **表格展示**：使用 `a-table` 组件展示用户列表，包含用户昵称、姓名、电话、邮箱等信息。
+
+  ```
+  <a-table :columns="columns" :data-source="data" class="table">
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'action'">
+        <a-dropdown>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item key="1" @click="() => handleDelete(record)">删除</a-menu-item>
+              <a-menu-item key="2" @click="() => handleEdit(record)">修改</a-menu-item>
+            </a-menu>
+          </template>
+          <a-button>选择 <DownOutlined /></a-button>
+        </a-dropdown>
+      </template>
+    </template>
+  </a-table>
+  ```
+
+- **添加/编辑用户**：通过 `a-modal` 组件弹出模态框，允许管理员添加或编辑用户信息。表单验证确保用户名和密码等必填项已填写。
+
+  ```
+  <a-modal v-model:open="visible" title="新的条目内容" @ok="onOk" @cancel="onCancel">
+    <a-form ref="formRef" :model="formState" layout="vertical">
+      <a-form-item label="昵称" :rules="[{ required: true, message: '请输入昵称!' }]">
+        <a-input v-model:value="formState.username" />
+      </a-form-item>
+      <a-form-item
+        label="密码"
+        :rules="[
+          { required: true, message: '请输入密码!' },
+          { min: 6, message: '密码长度至少6位' },
+        ]"
+      >
+        <a-input v-model:value="formState.password" />
+      </a-form-item>
+      <a-form-item label="客户名Firstname" :rules="[{ required: false, message: '请输入客户名!' }]">
+        <a-input v-model:value="formState.first_name" />
+      </a-form-item>
+      <a-form-item label="客户姓Lastname" :rules="[{ required: false, message: '请输入客户姓!' }]">
+        <a-input v-model:value="formState.last_name" />
+      </a-form-item>
+      <a-form-item label="电话号" :rules="[{ required: false, message: '请输入客户联系电话!' }]">
+        <a-input v-model:value="formState.phone" />
+      </a-form-item>
+      <a-form-item label="email" :rules="[{ required: false, message: '请输入客户email!' }]">
+        <a-input v-model:value="formState.email" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
+  ```
+
+- **用户管理逻辑**：
+
+  - **添加用户**：在 `onOk` 方法中，调用 `addUsers` API 添加新用户。
+  - **编辑用户**：在 `handleEdit` 方法中，将选中用户的信息填充到表单中，调用 `editUsers` API 更新用户信息。
+  - **删除用户**：在 `handleDelete` 方法中，调用 `deleteUsers` API 删除用户。
+
+  ```
+  const onOk = () => {
+    formRef.value
+      .validateFields()
+      .then(async (values) => {
+        try {
+          if (formState.mode === "add") {
+            await addUsers(toRaw(formState));
+            message.success("用户添加成功");
+          } else if (formState.mode === "edit") {
+            await editUsers(toRaw(formState));
+            message.success("用户信息更新成功");
+          }
+          fetchData("", formState.token);
+        } catch (error) {
+          message.error(
+            formState.mode === "add" ? "添加用户失败" : "更新用户信息失败"
+          );
+        }
+        resetForm();
+      })
+      .catch((info) => {
+        console.log("表单验证失败:", info);
+      });
+  };
+  
+  const handleDelete = async (record?: any) => {
+    await deleteUsers(record.id, formState.token);
+    message.success("删除成功");
+    fetchData("", formState.token);
+  };
+  ```
+
+  ![image-20241230210653653](image/image-20241230210653653.png)
+
+#### 8. 改进点
+
+在酒店管理系统中，酒店名称可能较长，手动输入酒店名称不仅效率低下，还容易出错。为了提升用户体验，我们对酒店选择功能进行了优化，实现了**自动搜索酒店并弹出选择弹窗**的功能。以下是具体的实现细节：
+
+1. **自动搜索酒店**
+
+在用户输入酒店名称时，系统会自动触发搜索功能，实时匹配酒店名称并显示相关结果。这一功能通过 `a-select` 组件和 `fetchHotelOptions` 方法实现。
+
+- **实现代码**：
+
+  ```
+  const fetchHotelOptions = async () => {
+    loadingHotelData.value = true;
+    try {
+      const response = await searchHotels("", formState.token); // 调用 API 获取酒店数据
+      if (response && Array.isArray(response.data)) {
+        hotelOptions.value = response.data.map((hotel: any) => ({
+          value: hotel.id, // 使用酒店的 id 作为 value
+          label: `${hotel.name} - ${hotel.location}`, // 将酒店名称和地址结合为 label
+        }));
+      } else {
+        hotelOptions.value = []; // 如果没有酒店数据，清空选项
+      }
+    } catch (error) {
+      console.error("获取酒店信息失败:", error);
+      message.error("获取酒店信息失败，请重试！");
+    } finally {
+      loadingHotelData.value = false; // 结束加载状态
+    }
+  };
+  ```
+
+- **功能说明**：
+
+  - 调用 `searchHotels` API 获取所有酒店数据。
+  - 将酒店数据映射为下拉框选项，格式为 `酒店名称 - 酒店地址`。
+  - 用户无需手动输入酒店名称，只需从下拉框中选择即可。
+
+2. **选择弹窗**
+
+为了进一步提升用户体验，当用户点击酒店选择框时，系统会弹出一个选择弹窗，展示所有酒店信息。用户可以通过弹窗快速选择目标酒店。
+
+- **实现代码**：
+
+  ```
+  <a-select v-model:value="formState.hotel" placeholder="选择酒店" @focus="fetchHotelOptions">
+    <a-select-option v-for="hotel in hotelOptions" :key="hotel.value" :value="hotel.value">
+      {{ hotel.label }}
+    </a-select-option>
+  </a-select>
+  ```
+
+- **功能说明**：
+
+  - 当用户点击选择框时，触发 `@focus` 事件，调用 `fetchHotelOptions` 方法加载酒店数据。
+  - 弹窗中展示所有酒店的名称和地址，用户可以通过滚动或搜索快速定位目标酒店。
+
+![image-20241230210812866](image/image-20241230210812866.png)
+
+![image-20241230210834508](image/image-20241230210834508.png)
+
+------
+
+另外，在酒店管理系统中，当用户需要编辑某个条目（如酒店、房间、预订或用户信息）时，系统会自动将当前条目的已有信息填充到表单中。这一改进显著提升了用户体验，避免了用户重新输入所有信息，同时减少了操作步骤和出错的可能性。以下是具体的实现细节：
+
+1. **自动填充功能的实现**
+
+在编辑模式下，系统会获取当前选中条目的数据，并将这些数据自动填充到表单的对应字段中。这一功能通过 `handleEdit` 方法实现。
+
+- **实现代码**：
+
+  ```
+  const handleEdit = (record?: any) => {
+    visible.value = true; // 打开编辑弹窗
+    if (record) {
+      Object.assign(formState, record); // 将选中条目的数据填充到表单中
+      formState.mode = "edit"; // 设置模式为编辑
+    }
+  };
+  ```
+
+- **功能说明**：
+
+  - 当用户点击“编辑”按钮时，系统会获取当前选中条目的数据（`record`）。
+  - 使用 `Object.assign` 方法将 `record` 中的数据赋值给 `formState`，从而自动填充表单字段。
+  - 设置 `formState.mode` 为 `"edit"`，以便在提交时区分是编辑操作还是添加操作。
+
+2. **表单字段绑定**
+
+表单字段通过 `v-model` 与 `formState` 进行双向绑定，确保数据能够自动填充并实时更新。
+
+- **实现代码**：
+
+  ```
+  <a-form ref="formRef" :model="formState" layout="vertical">
+    <a-form-item label="酒店名" :rules="[{ required: true, message: '请输入酒店名!' }]">
+      <a-input v-model:value="formState.name" />
+    </a-form-item>
+    <a-form-item label="地址" :rules="[{ required: true, message: '请输入酒店地址!' }]">
+      <a-input v-model:value="formState.location" />
+    </a-form-item>
+    <a-form-item label="电话号" :rules="[{ required: true, message: '请输入酒店电话号!' }]">
+      <a-input v-model:value="formState.phone" />
+    </a-form-item>
+    <a-form-item label="email" :rules="[{ required: true, message: '请输入酒店email!' }]">
+      <a-input v-model:value="formState.email" />
+    </a-form-item>
+  </a-form>
+  ```
+
+- **功能说明**：
+
+  - 每个表单字段通过 `v-model:value` 绑定到 `formState` 的对应属性。
+  - 当 `formState` 中的数据发生变化时，表单字段会自动更新显示。
+
+3. **编辑模式与添加模式的区分**
+
+在编辑模式下，表单会自动填充已有信息；而在添加模式下，表单字段为空。系统通过 `formState.mode` 来区分这两种模式。
+
+- **实现代码**：
+
+  ```
+  const handleAdd = () => {
+    visible.value = true; // 打开添加弹窗
+    formState.mode = "add"; // 设置模式为添加
+    resetForm(); // 重置表单字段
+  };
+  
+  const resetForm = () => {
+    Object.assign(formState, {
+      id: 0,
+      name: "",
+      location: "",
+      phone: "",
+      email: "",
+      mode: "",
+    });
+    formRef.value.resetFields(); // 重置表单验证状态
+  };
+  ```
+
+- **功能说明**：
+
+  - 在添加模式下，调用 `resetForm` 方法清空表单字段。
+  - 在编辑模式下，表单字段会自动填充已有信息，用户只需修改需要更新的部分。
+
+4. **提交时的逻辑区分**
+
+在提交表单时，系统会根据 `formState.mode` 的值决定是调用添加 API 还是编辑 API。
+
+- **实现代码**：
+
+  ```
+  const onOk = () => {
+    formRef.value
+      .validateFields()
+      .then(async (values) => {
+        try {
+          if (formState.mode === "add") {
+            await addHotels(toRaw(formState)); // 调用添加 API
+            message.success("酒店添加成功");
+          } else if (formState.mode === "edit") {
+            await editHotels(toRaw(formState)); // 调用编辑 API
+            message.success("酒店信息更新成功");
+          }
+          fetchData(); // 刷新数据
+        } catch (error) {
+          message.error(
+            formState.mode === "add" ? "添加酒店失败" : "更新酒店信息失败"
+          );
+        }
+        resetForm(); // 重置表单
+      })
+      .catch((info) => {
+        console.log("表单验证失败:", info);
+      });
+  };
+  ```
+
+- **功能说明**：
+
+  - 如果 `formState.mode` 为 `"add"`，则调用 `addHotels` API 添加新条目。
+  - 如果 `formState.mode` 为 `"edit"`，则调用 `editHotels` API 更新已有条目。
+
+![image-20241230211802193](image/image-20241230211802193.png)
+
+### f. 前端运行
+
+请在hotel-frontend目录下 `npm run serve` 或  `pnpm run serve`，默认情况下，前端会运行在http://localhost:8080/
+
+- 前端项目支持npm或pnpm，如果运行过程发现了某些库未安装手动安装一下即可
+  可能没安装的库：`pnpm install axios` ，`pnpm install pinia`，当然如果用 npm 也是同理
+
+- 前端在编写过程中使用了prettier进行代码规范化，可能不符合您的IDE设置，如果遇到格式之类的错误，可尝试 `npm run lint --fix` 进行修复
+
+- 跨域问题已经在my_hotel/settings.py中解决
+
+  ```
+  CORS_ALLOWED_ORIGINS = [
+      "http://localhost:8080",
+      ]
+  ```
+
+
 ## 7. 功能介绍
 
 ### a. customer
@@ -971,4 +1913,5 @@ search
 
 + 后端：
 
-作为一个不大不小的非常经典类型的项目，其实并未有什么创新在里面，也都不是什么高深的技术，内容虽然有些乏善可陈，但是在一步一步开发的过程中，逐渐看到项目完备起来，还是有喜悦在其中的，从中也是学到了很多。总之，虽然内容略显陈旧无趣，开发的过程并不枯燥。
+作为一个不大不小的非常经典类型的项目，在一步一步开发的过程中，逐渐看到项目完备起来，还是有喜悦在其中的，从中也是学到了很多。总之，虽然内容略显陈旧无趣，开发的过程并不枯燥。
+
