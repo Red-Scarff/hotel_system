@@ -81,9 +81,9 @@ const formState = reactive<FormState>({
 const router = useRouter();
 const loginUserStore = useLoginUserStore();
 const onFinish = async (values: any) => {
-  console.log(values);
+  // console.log(values);
   const res = await userLogin(values);
-  console.log(res);
+  // console.log(res);
   // 登录成功，保存全局状态
   if (res) {
     if (res.data.message === "Login successful.") {

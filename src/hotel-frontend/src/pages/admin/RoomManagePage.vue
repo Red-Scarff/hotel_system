@@ -271,7 +271,7 @@ const handleEdit = (record?: any) => {
     // 更新 formState
     Object.assign(formState, record);
     formState.mode = "edit";
-    console.log(formState);
+    // console.log(formState);
   }
 };
 
@@ -294,7 +294,7 @@ const resetForm = () => {
 
 // 确认按钮操作
 const onOk = () => {
-  console.log(formState);
+  // console.log(formState);
   formRef.value
     .validateFields()
     .then(async (values) => {
@@ -302,21 +302,21 @@ const onOk = () => {
         if (formState.mode === "add") {
           // console.log(toRaw(formState));
           await addRooms(toRaw(formState));
-          message.success("用户添加成功");
+          message.success("房间添加成功");
         } else if (formState.mode === "edit") {
           await editRooms(toRaw(formState));
-          message.success("用户信息更新成功");
+          message.success("房间信息更新成功");
         }
         fetchData("", formState.token);
       } catch (error) {
         message.error(
-          formState.mode === "add" ? "添加用户失败" : "更新用户信息失败"
+          formState.mode === "add" ? "添加房间失败" : "更新房间信息失败"
         );
       }
       resetForm();
     })
     .catch((info) => {
-      console.log("表单验证失败:", info);
+      // console.log("表单验证失败:", info);
     });
 };
 
@@ -337,7 +337,7 @@ const handleDelete = async (record?: any) => {
 const handleAdd = () => {
   visible.value = true;
   formState.mode = "add";
-  console.log(formState);
+  // console.log(formState);
 };
 </script>
 

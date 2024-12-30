@@ -201,7 +201,7 @@ const handleEdit = (record?: any) => {
     // 更新 formState
     Object.assign(formState, record);
     formState.mode = "edit";
-    console.log(formState);
+    // console.log(formState);
   }
 };
 
@@ -244,7 +244,7 @@ const onOk = () => {
       resetForm();
     })
     .catch((info) => {
-      console.log("表单验证失败:", info);
+      // console.log("表单验证失败:", info);
     });
 };
 
@@ -265,7 +265,7 @@ const handleDelete = async (record?: any) => {
 const handleAdd = () => {
   visible.value = true;
   formState.mode = "add";
-  console.log(formState);
+  // console.log(formState);
 };
 </script>
 

@@ -1,5 +1,7 @@
 # hotel_system
 
+![image-20241230113228077](README.assets/image-20241230113228077.png)
+
 src目录下存储了全部代码文件，report目录下存储了详细的说明
 
 ### **项目架构设计**
@@ -39,7 +41,7 @@ pip install django djangorestframework
 
   ```
     # my_hotel/local_setting.py
-
+  
     Local_DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",

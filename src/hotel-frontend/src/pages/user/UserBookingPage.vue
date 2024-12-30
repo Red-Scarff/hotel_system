@@ -75,12 +75,12 @@
           >
             <a-input v-model:value="formState.total_price" />
           </a-form-item> -->
-          <a-form-item
+          <!-- <a-form-item
             label="状态"
             :rules="[{ required: false, message: '请输入状态!' }]"
           >
             <a-input v-model:value="formState.status" />
-          </a-form-item>
+          </a-form-item> -->
         </a-form>
         <!-- 确认和取消按钮 -->
         <div class="form-buttons">
@@ -161,7 +161,7 @@ const resetForm = () => {
 };
 
 const onOk = async () => {
-  console.log(formState);
+  // console.log(formState);
 
   // 验证表单
   try {
@@ -191,12 +191,12 @@ const onOk = async () => {
 
     // 调用添加预订的 API
     await addBookings(toRaw(formState));
-    message.success("用户添加成功");
+    message.success("预订添加成功");
 
     resetForm();
   } catch (error) {
-    console.error("添加用户失败:", error);
-    message.error("添加用户失败");
+    console.error("用户预订失败:", error);
+    message.error("用户预订失败");
   }
 };
 

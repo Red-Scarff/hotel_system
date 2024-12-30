@@ -258,14 +258,29 @@ export const editBookings = async (formState: any) => {
 
 // 添加房间信息
 export const addBookings = async (formState: any) => {
-  const { id, mode, token, hotel_name, hotel_location, ...bookingData } =
-    formState;
+  const {
+    id,
+    mode,
+    token,
+    hotel_name,
+    hotel_location,
+    status,
+    ...bookingData
+  } = formState;
+
+  const dataToSend = {
+    ...bookingData,
+    status: "confirmed",
+  };
+
+  // console.log(dataToSend);
+
   return await myAxios.request({
     url: "/bookings/",
     method: "POST",
     headers: {
       Authorization: `Token ${token}`, // 添加Authorization头
     },
-    data: bookingData,
+    data: dataToSend, // 发送修改后的数据
   });
 };

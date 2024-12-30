@@ -7,13 +7,16 @@ router.beforeEach((to, from, next) => {
   const loginUser = loginUserStore.loginUser;
   const to_url = to.path;
   // console.log(`to_url:${to_url}`);
-  if (to_url.startsWith("/admin/")) {
+  if (to_url.startsWith("/admin/") || to_url.startsWith("/user/booking")) {
     // console.log(`${loginUser.userRole}`);
     if (!loginUser || loginUser.userRole === "") {
       message.error("请先登录");
       next("/user/login?redirect=" + to_url);
       return;
-    } else if (loginUser.userRole !== "manager") {
+    } else if (
+      to_url.startsWith("/admin/") &&
+      loginUser.userRole !== "manager"
+    ) {
       message.error("抱歉，您无权访问此页面");
       // next("/user/login?redirect=" + to_url);
       return;

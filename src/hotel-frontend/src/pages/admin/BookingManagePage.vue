@@ -125,7 +125,10 @@
             label="状态"
             :rules="[{ required: false, message: '请输入状态!' }]"
           >
-            <a-input v-model:value="formState.status" />
+            <a-input
+              v-model:value="formState.status"
+              placeholder="格式:confirmed/cancelled"
+            />
           </a-form-item>
         </a-form-item>
       </a-form>
@@ -277,7 +280,7 @@ const handleEdit = (record?: any) => {
     // 更新 formState
     Object.assign(formState, record);
     formState.mode = "edit";
-    console.log(formState);
+    // console.log(formState);
   }
 };
 
@@ -302,7 +305,7 @@ const resetForm = () => {
 
 // 确认按钮操作
 const onOk = () => {
-  console.log(formState);
+  // console.log(formState);
   formRef.value
     .validateFields()
     .then(async (values) => {
@@ -310,21 +313,22 @@ const onOk = () => {
         if (formState.mode === "add") {
           // console.log(toRaw(formState));
           await addBookings(toRaw(formState));
-          message.success("用户添加成功");
+          message.success("预订信息添加成功");
         } else if (formState.mode === "edit") {
           await editBookings(toRaw(formState));
-          message.success("用户信息更新成功");
+          message.success("预订信息更新成功");
         }
         fetchData("", formState.token);
       } catch (error) {
+        // console.log(error);
         message.error(
-          formState.mode === "add" ? "添加用户失败" : "更新用户信息失败"
+          formState.mode === "add" ? "添加预订失败" : "更新预订信息失败"
         );
       }
       resetForm();
     })
     .catch((info) => {
-      console.log("表单验证失败:", info);
+      // console.log("表单验证失败:", info);
     });
 };
 
@@ -345,7 +349,7 @@ const handleDelete = async (record?: any) => {
 const handleAdd = () => {
   visible.value = true;
   formState.mode = "add";
-  console.log(formState);
+  // console.log(formState);
 };
 
 const userOptions = ref<{ value: number; label: string }[]>([]); // 存储用户选项
@@ -390,9 +394,9 @@ const fetchHotelOptions = async () => {
       const hotelPromises = rooms.map(async (room: any) => {
         try {
           // 调用 searchHotels 获取对应的酒店信息
-          console.log(room);
+          // console.log(room);
           const hotelResponse = await searchHotels_byid(room.hotel);
-          console.log(hotelResponse);
+          // console.log(hotelResponse);
           const hotelName =
             hotelResponse && hotelResponse.data
               ? hotelResponse.data.name
@@ -418,7 +422,7 @@ const fetchHotelOptions = async () => {
       roomOptions.value = []; // 如果没有房间数据，清空选项
     }
   } catch (error) {
-    console.error("获取房间信息失败:", error);
+    // console.error("获取房间信息失败:", error);
     message.error("获取房间信息失败，请重试！");
   } finally {
     loadingRoomData.value = false; // 结束加载状态

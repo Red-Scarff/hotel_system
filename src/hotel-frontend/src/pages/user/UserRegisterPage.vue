@@ -77,18 +77,18 @@ const formState = reactive<FormState>({
 const router = useRouter();
 const loginUserStore = useLoginUserStore();
 const onFinish = async (values: any) => {
-  console.log(values);
+  // console.log(values);
   const res = await userRegister(values);
-  console.log(res);
+  // console.log(res);
   // 注册成功，保存全局状态
   if (res && res.data.id) {
-    console.log("注册成功");
+    // console.log("注册成功");
     console.log(res.data.username, res.data.password);
     const login_res = await userLogin({
       username: values.username,
       password: values.password,
     });
-    console.log(login_res);
+    // console.log(login_res);
     if (login_res.data.message === "Login successful.") {
       await loginUserStore.fetchLoginUser(login_res);
       message.success("注册成功");
