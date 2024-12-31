@@ -55,7 +55,7 @@ class Booking(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE, verbose_name="房间")
     customer_name = models.CharField(max_length=100, verbose_name="客户姓名")
     check_in_date = models.DateField(verbose_name="入住日期")
-    check_out_date = models.DateField(verbose_name="退房日期")
+    check_out_date = models.DateField(verbose_name="退房日期")  
     total_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="总价格")
     status = models.CharField(
         max_length=20,

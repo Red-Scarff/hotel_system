@@ -234,7 +234,8 @@ const fetchData = async (info = "", token: string) => {
       // 遍历房间数据数组
       for (let booking of response.data) {
         // 请求酒店数据
-        const hotel_res = await searchRooms_byid(booking.room);
+        const room_res = await searchRooms_byid(booking.room);
+        const hotel_res = await searchHotels_byid(room_res.data.hotel);
 
         if (hotel_res && hotel_res.data) {
           // 将酒店信息添加到房间数据
