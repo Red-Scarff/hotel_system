@@ -29,6 +29,7 @@ pip install django djangorestframework
 
 - 安装 Node.js [https://nodejs.org/en]()
 - 安装 vue 脚手架 `npm install -g @vue/cli`
+- 通过package.json安装相关依赖
 - 运行
 
   ```
